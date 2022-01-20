@@ -1,4 +1,5 @@
 import cookieParser from 'cookie-parser';
+import { resolve } from 'path';
 import express from 'express';
 import methodOverride from 'method-override';
 import bindRoutes from './routes.mjs';
@@ -51,7 +52,8 @@ if (env === 'development') {
 }
 
 // Bind route definitions to the Express application
-bindRoutes(app);
+// bindRoutes(app);
+app.get('/' , (req, res) => res.sendFile(resolve('dist', 'main.html')))
 
 // Set Express to listen on the given port
 const PORT = process.env.PORT || 3004;
