@@ -11,14 +11,24 @@ module.exports = {
   },
   module: {
     rules: [
+      // {
+      //   test: /\.scss$/,
+      //   use: [
+      //     MiniCssExtractPlugin.loader,
+      //     {
+      //       loader: 'css-loader',
+      //     },
+      //     'sass-loader',
+      //   ],
+      // },
       {
-        test: /\.scss$/,
+        test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          'style-loader',
           {
-            loader: 'css-loader',
+            loader: 'css-loader', options: { importLoaders: 1 },
           },
-          'sass-loader',
+          'postcss-loader',
         ],
       },
     ],
