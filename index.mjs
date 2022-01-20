@@ -1,7 +1,11 @@
 import cookieParser from 'cookie-parser';
 import { resolve } from 'path';
 import express from 'express';
-import bindRoutes from './routes.mjs';
+import dotenv from 'dotenv';
+import bindRoutes from './routers/index.mjs';
+
+dotenv.config();
+const PORT = process.env.PORT || 3004;
 
 const app = express();
 app.use(cookieParser());
@@ -33,9 +37,9 @@ if (env === 'development') {
 }
 
 // Bind route definitions to the Express application
-// bindRoutes(app);
-app.get('/' , (req, res) => res.sendFile(resolve('dist', 'main.html')))
+bindRoutes(app);
 
 // Set Express to listen on the given port
-const PORT = process.env.PORT || 3004;
-app.listen(PORT);
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}`);
+});
