@@ -56,6 +56,14 @@ export default class UserController extends BaseController {
         bio: req.body.bio,
       });
 
+      const promises = [];
+      req.body.checkedState.forEach((check, i) => {
+        if (check) {
+          promises.push(this.db.Purpose.findByPk(i + 1).then((purpose) => purpose.addUser(user)));
+        }
+      });
+      await Promise.all(promises);
+
       const payload = { id: user.id, username: user.name, email: user.email };
       const token = jwt.sign(payload, SALT, { expiresIn: '1 day' });
       res.json({ token });
