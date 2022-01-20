@@ -11,6 +11,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
     });
 
     await queryInterface.createTable('users', {
@@ -77,6 +85,14 @@ module.exports = {
           key: 'id',
         },
       },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
     });
 
     await queryInterface.createTable('matches', {
@@ -101,6 +117,14 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
       },
     });
 
@@ -131,6 +155,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.TEXT,
       },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
     });
 
     await queryInterface.createTable('swipes', {
@@ -159,6 +191,14 @@ module.exports = {
       swiped_right: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
       },
     });
   },
