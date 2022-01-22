@@ -1,6 +1,7 @@
 import { resolve } from 'path';
 import loginRouter from './loginRouter.mjs';
 import signupRouter from './signupRouter.mjs';
+import profileRouter from './profileRouter.mjs';
 
 const bindRoutes = (app) => {
   // special JS page. Include the webpack index.html file
@@ -10,6 +11,7 @@ const bindRoutes = (app) => {
 
   app.use('/login', loginRouter);
   app.use('/signup', signupRouter);
+  app.use('/profile', profileRouter);
 };
 
 export default bindRoutes;

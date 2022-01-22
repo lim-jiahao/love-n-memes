@@ -8,6 +8,7 @@ import initMessageModel from './message.mjs';
 import initMatchModel from './match.mjs';
 import initPurposeModel from './purpose.mjs';
 import initSwipeModel from './swipe.mjs';
+import initPictureModel from './picture.mjs';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -43,6 +44,7 @@ db.Match = initMatchModel(sequelize, Sequelize.DataTypes);
 db.Message = initMessageModel(sequelize, Sequelize.DataTypes);
 db.Purpose = initPurposeModel(sequelize, Sequelize.DataTypes);
 db.Swipe = initSwipeModel(sequelize, Sequelize.DataTypes);
+db.Picture = initPictureModel(sequelize, Sequelize.DataTypes);
 
 // define user-purpose relationship
 db.Purpose.belongsToMany(db.User, { through: 'users_purposes' });
@@ -97,6 +99,10 @@ db.User.hasMany(db.Message);
 // define match-message relationship
 db.Message.belongsTo(db.Match);
 db.Match.hasMany(db.Message);
+
+// define user-picture relationship
+db.Picture.belongsTo(db.User);
+db.User.hasMany(db.Picture);
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
