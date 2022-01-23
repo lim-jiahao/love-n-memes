@@ -4,7 +4,9 @@
 # Dependency directories
 node_modules/
 
-config/*
+config/
+
+package-lock.json
 
 # Do not commit the distribution folder compiled by Webpack
 dist

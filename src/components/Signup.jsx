@@ -26,7 +26,7 @@ const Signup = ({ setAuth }) => {
       name: username, email, password, age, location, bio, checkedState,
     };
     try {
-      const resp = await axios.post('/signup', data);
+      const resp = await axios.post('/api/user/signup', data);
       const { token } = resp.data;
       if (token) {
         localStorage.setItem('authToken', token);

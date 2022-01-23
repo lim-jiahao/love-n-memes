@@ -5,6 +5,8 @@ import db from '../models/index.mjs';
 const router = express.Router();
 const controller = new UserController(db.User, db);
 
-router.post('/', controller.createUser.bind(controller));
+router.post('/login', controller.authUser.bind(controller));
+router.post('/signup', controller.createUser.bind(controller));
+router.get('/unswiped', controller.getUnswipedUsers.bind(controller));
 
 export default router;

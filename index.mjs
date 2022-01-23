@@ -2,6 +2,7 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import dotenv from 'dotenv';
 import bindRoutes from './routers/index.mjs';
+import checkAuth from './middleware/auth.mjs'
 
 dotenv.config();
 const PORT = process.env.PORT || 3004;
@@ -35,6 +36,8 @@ if (env === 'development') {
     heartbeat: 10 * 1000,
   }));
 }
+
+app.use(checkAuth)
 
 // Bind route definitions to the Express application
 bindRoutes(app);

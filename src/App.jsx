@@ -83,6 +83,8 @@ const App = () => {
             element={auth ? <Profile user={user} /> : <Navigate replace to="/login" />}
           />
         </Routes>
+
+        {/* {auth && <Home />} */}
       </BrowserRouter>
     </>
   );

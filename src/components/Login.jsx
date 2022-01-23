@@ -12,7 +12,7 @@ const Login = ({ setAuth }) => {
     e.preventDefault();
     const data = { email, password };
     try {
-      const resp = await axios.post('/login', data);
+      const resp = await axios.post('/api/user/login', data);
       const { token } = resp.data;
       if (token) {
         localStorage.setItem('authToken', token);

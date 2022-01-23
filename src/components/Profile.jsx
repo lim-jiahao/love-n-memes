@@ -9,7 +9,7 @@ const Profile = ({ user }) => {
 
   useEffect(async () => {
     try {
-      const resp = await axios.get(`/profile/picture/${user}`);
+      const resp = await axios.get(`/api/profile/picture/${user}`);
       setMemes(resp.data.pictures);
     } catch (err) {
       console.error(err.response);
@@ -62,7 +62,7 @@ const Profile = ({ user }) => {
       const formData = new FormData();
       formData.append('picture', file);
       formData.append('user', user);
-      const resp = await axios.post('/profile/picture', formData, config);
+      const resp = await axios.post('/api/profile/picture', formData, config);
       if (resp) {
         setFile(null);
         setDisableSubmit(true);
@@ -76,7 +76,7 @@ const Profile = ({ user }) => {
 
   const handleImageClick = async (filename) => {
     try {
-      await axios.delete(`/profile/picture/${filename}`);
+      await axios.delete(`/api/profile/picture/${filename}`);
       const memesCopy = [...memes].filter((meme) => meme.filename !== filename);
       setMemes(memesCopy);
     } catch (err) {
