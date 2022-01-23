@@ -7,6 +7,7 @@ import Home from './components/Home.jsx';
 import Login from './components/Login.jsx';
 import Signup from './components/Signup.jsx';
 import Logout from './components/Logout.jsx';
+import Profile from './components/Profile.jsx';
 
 const App = () => {
   const [auth, setAuth] = useState(false);
@@ -41,11 +42,15 @@ const App = () => {
       <BrowserRouter>
         <nav>
           <Link to="/">Home</Link>
-          {!auth && (
+          {' '}
+          |
+          {' '}
+          {auth ? (
             <>
-              {' '}
-              |
-              {' '}
+              <Link to="/profile">Profile</Link>
+            </>
+          ) : (
+            <>
               <Link to="/login">Log In</Link>
               {' '}
               |
@@ -69,13 +74,17 @@ const App = () => {
         <Routes>
           <Route path="signup" element={<Signup setAuth={setAuth} />} />
           <Route path="login" element={<Login setAuth={setAuth} />} />
-          {/* <Route
+          <Route
             path="/"
             element={auth ? <Home /> : <Navigate replace to="/login" />}
-          /> */}
+          />
+          <Route
+            path="profile"
+            element={auth ? <Profile user={user} /> : <Navigate replace to="/login" />}
+          />
         </Routes>
 
-        {auth && <Home />}
+        {/* {auth && <Home />} */}
       </BrowserRouter>
     </>
   );

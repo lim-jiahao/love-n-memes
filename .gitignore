@@ -4,7 +4,7 @@
 # Dependency directories
 node_modules/
 
-config/*
+config/
 
 package-lock.json
 
@@ -12,3 +12,5 @@ package-lock.json
 dist
 
 .env
+
+uploads/*

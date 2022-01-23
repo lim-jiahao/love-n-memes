@@ -1,5 +1,4 @@
 import cookieParser from 'cookie-parser';
-import { resolve } from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
 import bindRoutes from './routers/index.mjs';
@@ -14,6 +13,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static('public'));
 app.use(express.static('dist'));
+app.use(express.static('uploads'));
 
 // Set up Webpack in dev env
 const env = process.env.NODE_ENV || 'development';
