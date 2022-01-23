@@ -106,7 +106,7 @@ export default class UserController extends BaseController {
         as: 'purposes', // alias automatically created by sequelize
       }],
     });
-
+    // TODO: remove if id in matches
     res.status(200).send({ users: rows, length: rows.length });
   }
 }
