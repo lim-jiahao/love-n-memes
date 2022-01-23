@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
-import decode from "jwt-decode";
-import Home from "./components/Home.jsx";
-import Login from "./components/Login.jsx";
-import Signup from "./components/Signup.jsx";
-import Logout from "./components/Logout.jsx";
+import React, { useEffect, useState } from 'react';
+import {
+  BrowserRouter, Routes, Route, Link, Navigate,
+} from 'react-router-dom';
+import decode from 'jwt-decode';
+import Home from './components/Home.jsx';
+import Login from './components/Login.jsx';
+import Signup from './components/Signup.jsx';
+import Logout from './components/Logout.jsx';
+import Profile from './components/Profile.jsx';
 
 const App = () => {
   const [auth, setAuth] = useState(false);
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState('');
 
   useEffect(() => {
     // currently no authentication on the token is being done (no jwt.verify)
@@ -16,7 +19,7 @@ const App = () => {
     // when app is more fleshed out, we prob will do some axios get request to the backend
     // to get data and populate the page. the token will then be authenticated on the backend
     //  someone may access a protected page on the frontend but no data will be sent to them
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem('authToken');
     if (!token) {
       setAuth(false);
       return;
@@ -39,10 +42,19 @@ const App = () => {
       <BrowserRouter>
         <nav>
           <Link to="/">Home</Link>
-          {!auth && (
+          {' '}
+          |
+          {' '}
+          {auth ? (
             <>
-              {" "}
-              | <Link to="/login">Log In</Link> |{" "}
+              <Link to="/profile">Profile</Link>
+            </>
+          ) : (
+            <>
+              <Link to="/login">Log In</Link>
+              {' '}
+              |
+              {' '}
               <Link to="/signup">Sign Up</Link>
             </>
           )}
@@ -50,7 +62,11 @@ const App = () => {
 
         {auth && (
           <div>
-            <span>Currently logged in as {user}</span>
+            <span>
+              Currently logged in as
+              {' '}
+              {user}
+            </span>
             <Logout setAuth={setAuth} />
           </div>
         )}
@@ -61,6 +77,10 @@ const App = () => {
           <Route
             path="/"
             element={auth ? <Home /> : <Navigate replace to="/login" />}
+          />
+          <Route
+            path="profile"
+            element={auth ? <Profile user={user} /> : <Navigate replace to="/login" />}
           />
         </Routes>
       </BrowserRouter>

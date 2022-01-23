@@ -69,4 +69,67 @@ export default class UserController extends BaseController {
       res.json({ token });
     } catch (error) { res.status(503).send({ error }); }
   }
+
+  async addPicture(req, res) {
+    try {
+      const user = await this.model.findOne({
+        where: {
+          name: req.body.user,
+        },
+      });
+
+      if (!user) {
+        res.status(401).json({ error: 'An error occured' });
+        return;
+      }
+      const picture = await this.db.Picture.create({
+        filename: req.file.filename,
+        userId: user.id,
+      });
+
+      res.json({ picture });
+    } catch (error) {
+      res.status(503).send({ error });
+    }
+  }
+
+  async getPictures(req, res) {
+    try {
+      const user = await this.model.findOne({
+        where: {
+          name: req.params.user,
+        },
+      });
+
+      if (!user) {
+        res.status(401).json({ error: 'An error occured' });
+        return;
+      }
+
+      const pictures = await user.getPictures();
+      res.json({ pictures });
+    } catch (error) {
+      res.status(503).send({ error });
+    }
+  }
+
+  async deletePicture(req, res) {
+    try {
+      const picture = await this.db.Picture.findOne({
+        where: {
+          filename: req.params.file,
+        },
+      });
+
+      if (!picture) {
+        res.status(401).json({ error: 'An error occured' });
+        return;
+      }
+
+      await picture.destroy();
+      res.json({ status: 'success' });
+    } catch (error) {
+      res.status(503).send({ error });
+    }
+  }
 }
