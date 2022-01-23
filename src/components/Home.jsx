@@ -1,6 +1,7 @@
 import React from 'react';
+import MatchArea from './MatchArea.jsx';
 
 const Home = () => (
-  <h2>Home</h2>
+  <MatchArea />
 );
 export default Home;

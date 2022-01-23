@@ -10,11 +10,13 @@ const { SALT } = process.env;
 const checkAuth = (req, res, next) => {
   try {
     const authToken = req.header('Authorization').replace('Bearer ', '');
-    jwt.verify(authToken, SALT);
-    next();
+    const userInfo = jwt.verify(authToken, SALT);
+    req.userId = userInfo.id;
   } catch (err) {
-    res.status(403).json({ err });
+    // res.status(403).json({ err });
+    console.log('no user info');
   }
+  next();
 };
 
 export default checkAuth;

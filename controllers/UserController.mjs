@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { Op } from 'sequelize';
 import BaseController from './BaseController.mjs';
 import getPasswordHash from '../utils/hash.mjs';
 
@@ -68,5 +69,44 @@ export default class UserController extends BaseController {
       const token = jwt.sign(payload, SALT, { expiresIn: '1 day' });
       res.json({ token });
     } catch (error) { res.status(503).send({ error }); }
+  }
+
+  async getUnswipedUsers(req, res) {
+    const { userId } = req;
+    const user = await this.model.findOne({
+      where: {
+        id: userId,
+      },
+      include: {
+        model: this.db.Purpose,
+        attributes: ['id', 'name'],
+      },
+    });
+    const purposeArray = user.purposes.map((purpose) => purpose.id);
+    console.log(purposeArray, 'purposes');
+    // queries for all users except the user themselve and all the past users they have swiped on
+    const rows = await this.model.findAll({
+      where: {
+        id: {
+          [Op.not]: user.id,
+        },
+        '$swipedBy.id$': null,
+        '$purposes.id$': {
+          [Op.in]: purposeArray,
+        },
+      },
+      include: [{
+        model: this.db.Swipe,
+        as: 'swipedBy',
+        required: false,
+      },
+      {
+        model: this.db.Purpose,
+        required: false,
+        as: 'purposes', // alias automatically created by sequelize
+      }],
+    });
+
+    res.status(200).send({ users: rows, length: rows.length });
   }
 }

@@ -24,13 +24,13 @@ module.exports = {
     using the loop index as the id for each user so that i can
     create the through tables for purposes as well
     */
-    for (let i = 1; i <= 1000; i += 1) {
+    for (let i = 1; i <= 10; i += 1) {
       const firstName = faker.name.firstName();
       const lastName = faker.name.lastName();
       const userObj = {
         name: `${firstName} ${lastName}`,
         email: `${faker.internet.email(firstName, String(_.random(1000)))}`,
-        password: passwordHash, // how
+        password: passwordHash,
         location: 'Singapore',
         age: _.random(18, 50),
         bio: `${faker.random.words(5)}`,

@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack_conf/webpack.prod.js",
     "start": "node index.mjs",
-    "watch": "nodemon index.mjs"
+    "watch": "nodemon index.mjs",
+    "reset": "dropdb love_n_memes && npx sequelize db:create && npx sequelize db:migrate && npx sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
