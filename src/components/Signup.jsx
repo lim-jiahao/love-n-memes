@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Signup = ({ setAuth }) => {
+  // this should prob be queried from db by right but its def not changing so just hard code lol
   const purposes = ['Love', 'Friendship'];
+  const genders = ['Male', 'Female'];
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -11,20 +13,37 @@ const Signup = ({ setAuth }) => {
   const [age, setAge] = useState(18);
   const [location, setLocation] = useState('');
   const [bio, setBio] = useState('');
-  const [checkedState, setCheckedState] = useState(new Array(purposes.length).fill(false));
-  const [checkMsg, setCheckMsg] = useState('');
+  const [selectedGender, setSelectedGender] = useState(0); // selected index
+  const [purposesChecked, setPurposesChecked] = useState(new Array(purposes.length).fill(false));
+  const [purposeMsg, setPurposeMsg] = useState('');
+  const [interestsChecked, setInterestsChecked] = useState(new Array(genders.length).fill(false));
+  const [interestMsg, setInterestMsg] = useState('');
 
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    if (checkedState.every((check) => !check)) {
-      setCheckMsg('Please select at least 1');
+    if (interestsChecked.every((check) => !check)) {
+      setInterestMsg('Please select at least 1');
+      return;
+    }
+
+    if (purposesChecked.every((check) => !check)) {
+      setPurposeMsg('Please select at least 1');
       return;
     }
     const data = {
-      name: username, email, password, age, location, bio, checkedState,
+      name: username,
+      email,
+      password,
+      age,
+      location,
+      bio,
+      selectedGender,
+      purposesChecked,
+      interestsChecked,
     };
+
     try {
       const resp = await axios.post('/api/user/signup', data);
       const { token } = resp.data;
@@ -39,10 +58,16 @@ const Signup = ({ setAuth }) => {
     }
   };
 
-  const handleOnCheck = (index) => {
-    const updatedCheckedState = checkedState.map((item, i) => (index === i ? !item : item));
-    setCheckedState(updatedCheckedState);
-    if (checkMsg) setCheckMsg('');
+  const handleInterestCheck = (index) => {
+    const updatedInterestsChecked = interestsChecked.map((item, i) => (index === i ? !item : item));
+    setInterestsChecked(updatedInterestsChecked);
+    if (interestMsg) setInterestMsg('');
+  };
+
+  const handlePurposeCheck = (index) => {
+    const updatedPurposesChecked = purposesChecked.map((item, i) => (index === i ? !item : item));
+    setPurposesChecked(updatedPurposesChecked);
+    if (purposeMsg) setPurposeMsg('');
   };
 
   return (
@@ -60,14 +85,33 @@ const Signup = ({ setAuth }) => {
         <textarea cols={50} value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Say something about yourself!" required />
         <br />
 
+        <span>Gender: </span>
+        {genders.map((gender, index) => (
+          <label htmlFor={gender}>
+            <input type="radio" value={gender} checked={genders[selectedGender] === gender} onChange={() => setSelectedGender(index)} />
+            {gender}
+          </label>
+        ))}
+        <br />
+
+        <span>Interested in: </span>
+        {genders.map((gender, index) => (
+          <label htmlFor={gender}>
+            <input type="checkbox" value={gender} checked={interestsChecked[index]} onChange={() => handleInterestCheck(index)} />
+            {gender}
+          </label>
+        ))}
+        <p>{interestMsg}</p>
+        <br />
+
         <span>Looking for: </span>
         {purposes.map((purpose, index) => (
           <label htmlFor={purpose}>
-            <input type="checkbox" id={purpose} name={purpose} value={purpose} checked={checkedState[index]} onChange={() => handleOnCheck(index)} />
+            <input type="checkbox" value={purpose} checked={purposesChecked[index]} onChange={() => handlePurposeCheck(index)} />
             {purpose}
           </label>
         ))}
-        <p>{checkMsg}</p>
+        <p>{purposeMsg}</p>
         <br />
         <input type="submit" value="Sign Up" />
       </form>
