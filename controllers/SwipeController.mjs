@@ -10,47 +10,42 @@ export default class SwipeController extends BaseController {
       res.status(403).send({ message: 'Login to swipe sir' }).end();
       return;
     }
+    // create swipe
     console.log(req.userId, 'userId');
     console.log(req.body, 'requestBody');
+
     const { swipeeId } = req.body;
     if (!(swipeeId === req.userId)) {
-      // actually have to find if swipe alr exist in either swiper swipee
-      // relationship alr exists then create match
-      const haveBeenSwipedBefore = await this.model.findOne({
+      // by right all swipes should be new and created, there should not be a existing
+      // swipe row as the users are only shown users that they hve not swiped on before
+      const [swipe, created] = await this.model.findOrCreate({
+        where: {
+          swiperId: req.userId,
+          swipeeId,
+        },
+        defaults: {
+          swipedRight: req.body.swipedRight,
+        },
+      });
+
+      // try and find if existing swipe exist with the swipee
+      const existingSwipe = await this.model.findOne({
         where: {
           swiperId: swipeeId,
           swipeeId: req.userId,
         },
       });
-      console.log(haveBeenSwipedBefore);
-      if (haveBeenSwipedBefore) {
-        // user has already been swiped by the swipee
-        // update model with right swiped and
-        haveBeenSwipedBefore.set({ swipedRight: true });
-        await haveBeenSwipedBefore.save();
 
-        // create match model
-        await this.db.Match.create({
-          matcherId: req.userId,
-          matcheeId: swipeeId,
-        });
-        res.status(201).send({ message: 'a match has been made!' });
-      } else {
-        // user has not been swiped on by swipee, so create new
-        // swipe model
-        const [swipe, created] = await this.model.findOrCreate({
-          where: {
-            swiperId: req.userId,
-            swipeeId,
-          },
-          defaults: {
-            swipedRight: false,
-          },
-        });
-        console.log(swipe);
-        if (created) res.status(201).send({ message: 'successfully created swipe' });
-        else res.status(400).send({ message: "you've already swiped this user" });
-      }
+      if (swipe && existingSwipe) {
+        if (swipe.swipedRight && existingSwipe.swipedRight) {
+          await this.db.Match.create({
+            matcherId: req.userId,
+            matcheeId: swipeeId,
+          });
+          res.status(201).send({ message: 'a match has been made!' });
+        }
+      } else if (created) res.status(201).send({ message: 'successfully created swipe' });
+      else res.status(400).send({ message: "you've already swiped this user" });
     } else res.status(400).send({ message: 'cant swipe urself man' });
   }
 }

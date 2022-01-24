@@ -14,25 +14,16 @@ const MatchArea = () => {
     console.log(response.data.users, response.data.length);
   }, []);
 
-  const swipeRight = async () => {
+  const swipe = async (swipedRight) => {
     // defo better logic can be used here just wanna get it working for now
     console.log('clicked?');
     const tempUsers = [...users];
     tempUsers.shift();
     setUsers(tempUsers);
     setCurrentUser(tempUsers[0]);
-    const response = await axios.post('/api/swipe/create', { swipeeId: currentUser.id }, { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } });
+    const response = await axios.post('/api/swipe/create', { swipeeId: currentUser.id, swipedRight }, { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } });
     console.log(response.data);
     setMessage(response.data.message);
-  };
-
-  const swipeLeft = () => {
-    // currently not much logic for this as we dont have a table that stores users
-    // that have been swiped left
-    const tempUsers = [...users];
-    tempUsers.shift();
-    setUsers(tempUsers);
-    setCurrentUser(tempUsers[0]);
   };
 
   return (
@@ -57,14 +48,14 @@ const MatchArea = () => {
                 <button
                   type="button"
                   className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                  onClick={swipeLeft}
+                  onClick={() => swipe(false)}
                 >
                   No
                 </button>
                 <button
                   type="button"
                   className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  onClick={swipeRight}
+                  onClick={() => swipe(true)}
                 >
                   Yes
                 </button>

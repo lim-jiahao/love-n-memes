@@ -29,6 +29,7 @@ export default class UserController extends BaseController {
 
       const payload = { id: user.id, username: user.name, email: user.email };
       const token = jwt.sign(payload, SALT, { expiresIn: '1 day' });
+
       res.json({ token });
     } catch (error) { res.status(503).send({ error }); }
   }
@@ -77,34 +78,73 @@ export default class UserController extends BaseController {
       where: {
         id: userId,
       },
-      include: {
+      include: [{
         model: this.db.Purpose,
         attributes: ['id', 'name'],
-      },
+      }],
     });
     const purposeArray = user.purposes.map((purpose) => purpose.id);
+    console.log(user, 'user');
     console.log(purposeArray, 'purposes');
     // queries for all users except the user themselve and all the past users they have swiped on
     const rows = await this.model.findAll({
       where: {
-        id: {
-          [Op.not]: user.id,
-        },
-        '$swipedBy.id$': null,
+        // don't get the user themselves
+        id: { [Op.not]: user.id },
+        // don't get users that the user has already swiped on
+        [Op.or]: [
+          {
+            '$swipedBy.swiper_id$': {
+              [Op.not]: user.id,
+            },
+          },
+          // need this here because if the swipedBy array is empty
+          // the entry would not return
+          { '$swipedBy.id$': null },
+        ],
+        // ensures users shown have the same purpose
         '$purposes.id$': {
           [Op.in]: purposeArray,
         },
+        [Op.or]: [
+          {
+            '$matchedBy.matcher_id$': {
+              [Op.not]: user.id,
+            },
+          },
+          { '$matchedBy.id$': null },
+        ],
+        [Op.or]: [
+          {
+            '$matchedOn.matcher_id$': {
+              [Op.not]: user.id,
+            },
+          },
+          { '$matchedBy.id$': null },
+        ],
       },
       include: [{
         model: this.db.Swipe,
         as: 'swipedBy',
         required: false,
+        attributes: ['swiper_id', 'swipee_id'],
       },
       {
         model: this.db.Purpose,
         required: false,
         as: 'purposes', // alias automatically created by sequelize
-      }],
+      },
+      {
+        model: this.db.Match,
+        required: false,
+        as: 'matchedBy',
+      },
+      {
+        model: this.db.Match,
+        required: false,
+        as: 'matchedOn',
+      },
+      ],
     });
     // TODO: remove if id in matches
     res.status(200).send({ users: rows, length: rows.length });
