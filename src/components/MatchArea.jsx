@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import ProfileDeck from './ProfileDeck.jsx';
+
 const MatchArea = () => {
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
@@ -27,49 +29,17 @@ const MatchArea = () => {
   };
 
   return (
-    <>
+    <div className="max-w-7xl mx-auto px-4 flex justify-center items-center h-full">
 
       {currentUser ? (
-        <div className="max-w-7xl mx-auto px-4 flex justify-center items-center">
-          {message}
-          <div className="max-w-3xl mx-auto">
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl ">
-              <div>
-                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100" />
-                <div className="mt-3 text-center">
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      {currentUser.name}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-5 flex">
-                <button
-                  type="button"
-                  className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                  onClick={() => swipe(false)}
-                >
-                  No
-                </button>
-                <button
-                  type="button"
-                  className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  onClick={() => swipe(true)}
-                >
-                  Yes
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProfileDeck users={users} />
       )
         : (
           <div>
             no more users around your area
           </div>
         )}
-    </>
+    </div>
 
   );
 };
