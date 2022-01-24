@@ -61,6 +61,7 @@
     "webpack-merge": "^5.7.3"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "cookie-parser": "^1.4.5",
     "dotenv": "^14.2.0",
     "express": "^4.17.1",

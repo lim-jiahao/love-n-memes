@@ -56,12 +56,18 @@ export default class UserController extends BaseController {
         location: req.body.location,
         age: req.body.age,
         bio: req.body.bio,
+        genderId: req.body.selectedGender + 1,
       });
 
       const promises = [];
-      req.body.checkedState.forEach((check, i) => {
+      req.body.purposesChecked.forEach((check, i) => {
         if (check) {
           promises.push(this.db.Purpose.findByPk(i + 1).then((purpose) => purpose.addUser(user)));
+        }
+      });
+      req.body.interestsChecked.forEach((check, i) => {
+        if (check) {
+          promises.push(this.db.Interest.findByPk(i + 1).then((intrst) => intrst.addUser(user)));
         }
       });
       await Promise.all(promises);

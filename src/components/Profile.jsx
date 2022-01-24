@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
+import Logout from './Logout.jsx';
 
-const Profile = ({ user }) => {
+const Profile = ({ user, setAuth }) => {
   const [file, setFile] = useState(null);
   const [errMsg, setErrMsg] = useState('');
   const [disableSubmit, setDisableSubmit] = useState(true);
@@ -87,6 +88,14 @@ const Profile = ({ user }) => {
   return (
     <>
       <div>
+        <div>
+          <span>
+            Currently logged in as
+            {' '}
+            {user}
+          </span>
+          <Logout setAuth={setAuth} />
+        </div>
         {memes.length > 0
           ? (
             <div className="flex">

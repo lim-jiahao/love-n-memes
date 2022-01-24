@@ -30,6 +30,14 @@ export default function initUserModel(sequelize, DataTypes) {
       allowNull: false,
       type: DataTypes.STRING,
     },
+    genderId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'genders',
+        key: 'id',
+      },
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,

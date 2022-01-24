@@ -19,6 +19,7 @@ module.exports = {
     const passwordHash = getPasswordHash(password);
     const users = [];
     const userPurposes = [];
+    const userInterests = [];
     /*
     creates a 1000 users with faker lib all with the same pw
     using the loop index as the id for each user so that i can
@@ -34,11 +35,13 @@ module.exports = {
         location: 'Singapore',
         age: _.random(18, 50),
         bio: `${faker.random.words(5)}`,
+        gender_id: _.random(1, 2),
         created_at: new Date(),
         updated_at: new Date(),
       };
-      const randNum = _.random(1, 2);
-      for (let j = 1; j <= randNum; j += 1) {
+      const choices = [[1], [2], [1, 2]];
+      let randNum = _.random(choices.length - 1);
+      choices[randNum].forEach((j) => {
         const purposeObj = {
           user_id: i,
           purpose_id: j,
@@ -46,17 +49,30 @@ module.exports = {
           updated_at: new Date(),
         };
         userPurposes.push(purposeObj);
-      }
+      });
+
+      randNum = _.random(choices.length - 1);
+      choices[randNum].forEach((k) => {
+        const interestObj = {
+          user_id: i,
+          interest_id: k,
+          created_at: new Date(),
+          updated_at: new Date(),
+        };
+        userInterests.push(interestObj);
+      });
 
       users.push(userObj);
     }
 
     await queryInterface.bulkInsert('users', users);
     await queryInterface.bulkInsert('users_purposes', userPurposes);
+    await queryInterface.bulkInsert('users_interests', userInterests);
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('users', null, {});
+    await queryInterface.bulkDelete('users_interests', null, {});
     await queryInterface.bulkDelete('users_purposes', null, {});
+    await queryInterface.bulkDelete('users', null, {});
   },
 };
