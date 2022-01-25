@@ -1,73 +1,65 @@
-import React, { useRef, useState } from 'react';
-import { motion, useAnimation, useMotionValue } from 'framer-motion';
+import React, { useRef, useState, useEffect } from 'react';
+import {
+  motion, useAnimation, useMotionValue, useTransform,
+} from 'framer-motion';
 
-const Profilecard = ({ drag }) => {
-  const randomDegree = [0, 6][Math.floor(Math.random() * 2)];
-
-  const cardElem = useRef(null);
-
-  const x = useMotionValue(0);
-  const controls = useAnimation();
-
-  const [constrained, setConstrained] = useState(true);
-
-  const [direction, setDirection] = useState();
-
+const Profilecard = ({ ...props }) => {
+  const [isGrabbing, setIsGrabbing] = useState(false);
+  const [startPosition, setStartPosition] = useState();
   const [velocity, setVelocity] = useState();
 
-  // const getVote = (childNode, parentNode) => {
-  //   const childRect = childNode.getBoundingClientRect();
-  //   const parentRect = parentNode.getBoundingClientRect();
-  //   const result = parentRect.left >= childRect.right
-  //     ? false
-  //     : parentRect.right <= childRect.left
-  //       ? true
-  //       : undefined;
-  //   return result;
-  // };
+  const randomDegree = [0, 6][Math.floor(Math.random() * 2)];
 
-  // determine direction of swipe based on velocity
-  const getDirection = () => (velocity >= 1 ? 'right' : velocity <= -1 ? 'left' : undefined);
+  const animation = useAnimation();
 
-  const getTrajectory = () => {
-    setVelocity(x.get());
-    setDirection(getDirection());
+  const x = useMotionValue(0);
+
+  const rotate = useTransform(x, [-150, 150], [-20, 20]);
+  function handleDragEnd(event) {
+    const dragX = x.get();
+
+    // reset rotation
+    animation.start({ rotate: 0 });
+    if (dragX <= -1) {
+      animation.start({ x: -500, transition: { duration: 0.2 } });
+      console.log('animating?');
+    }
+
+    // If dragged past a certain point to the left, stop tracking the x and y positions
+    // Animate the card to fly to the left
+    else if (dragX >= 1) {
+      animation.start({ x: 500, transition: { duration: 0.2 } });
+    }
+  }
+
+  const handleDrag = (event, info) => {
+    const dragX = x.get();
+    console.log(dragX, 'drag x');
+    if (dragX > 1) {
+      animation.start({ rotate: 15 });
+    } else if (dragX < -1) {
+      animation.start({ rotate: -15 });
+    }
   };
 
-  const flyAway = (min) => {
-    const flyAwayDistance = (direction) => {
-      const parentWidth = cardElem.current.parentNode.getBoundingClientRect()
-        .width;
-      const childWidth = cardElem.current.getBoundingClientRect().width;
-      console.log(parentWidth, 'parentwidth');
-      console.log(childWidth, 'child width');
-      return direction === 'left'
-        ? -parentWidth - childWidth / 2
-        : parentWidth + childWidth / 2;
-    };
-
-    if (direction && Math.abs(velocity) > min) {
-      setConstrained(false);
-      controls.start({
-        x: flyAwayDistance(direction),
-      });
-    }
+  const changePointer = () => {
+    setIsGrabbing(!isGrabbing);
   };
 
   return (
     <motion.div
-      className="absolute ml-auto mr-auto w-80 left-0 right-0 "
-      animate={controls}
-      drag
-      dragConstraints={constrained && {
+      className={`absolute ml-auto mr-auto w-80 left-0 right-0 rotate-6 ${isGrabbing ? 'cursor-grabbing' : 'cursor-grab'}`}
+      onMouseDown={changePointer}
+      onMouseUp={changePointer}
+      animate={animation}
+      dragConstraints={{
         left: 0, right: 0, top: 0, bottom: 0,
       }}
       dragElastic={1}
-      ref={cardElem}
+      onDrag={handleDrag}
+      onDragEnd={handleDragEnd}
+      drag="x"
       style={{ x }}
-      onDrag={getTrajectory}
-      onDragEnd={() => flyAway(500)}
-      whileTap={{ scale: 1.1 }}
     >
       <div className={`bg-white font-semibold text-center rounded-3xl border shadow-lg p-10 max-w-xs rotate-${randomDegree}`}>
         <img className="mb-3 w-32 h-32 rounded-full shadow-lg mx-auto" src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" alt="product designer" />

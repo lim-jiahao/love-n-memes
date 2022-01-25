@@ -87,7 +87,12 @@ export default class UserController extends BaseController {
       include: [{
         model: this.db.Purpose,
         attributes: ['id', 'name'],
-      }],
+      },
+      {
+        model: this.db.Interest,
+        as: 'interests',
+      },
+      ],
     });
     const purposeArray = user.purposes.map((purpose) => purpose.id);
     console.log(user, 'user');
