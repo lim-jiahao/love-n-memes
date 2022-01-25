@@ -94,32 +94,47 @@ export default class UserController extends BaseController {
       },
       ],
     });
+
+    const interestArray = user.interests.map((interest) => interest.id);
     const purposeArray = user.purposes.map((purpose) => purpose.id);
-    console.log(user, 'user');
     const swipes = await this.db.Swipe.findAll({ where: { swiperId: user.id } });
     const swipedUsersArray = swipes.map((swipe) => swipe.swipeeId);
-    console.log(swipedUsersArray, 'swipedUsers');
-    console.log(purposeArray, 'purposes');
+
+    console.log(user);
     // queries for all users except the user themselve and all the past users they have swiped on
     const rows = await this.model.findAll({
       where: {
-        // don't get the user themselves
+        // users dont get themselves & users that they have already swiped on
+        id: {
+          [Op.and]: [
+            { [Op.not]: user.id },
+            { [Op.notIn]: swipedUsersArray },
+          ],
+        },
+
+        // ensure mutual interest between the users
         [Op.and]: [
           {
-            id: {
-              [Op.not]: user.id,
+            genderId: {
+              [Op.in]: interestArray,
             },
           },
           {
-            id: {
-              [Op.notIn]: swipedUsersArray,
+            '$interests.id$': {
+              [Op.eq]: user.genderId,
             },
           },
         ],
+
+        genderId: {
+          [Op.in]: interestArray,
+        },
+
         // ensure that users have the same purpose
         '$purposes.id$': {
           [Op.in]: purposeArray,
         },
+
       },
       include: [
         {
@@ -131,6 +146,11 @@ export default class UserController extends BaseController {
           model: this.db.Purpose,
           required: false,
           as: 'purposes', // alias automatically created by sequelize
+        },
+        {
+          model: this.db.Interest,
+          required: false,
+          as: 'interests',
         },
       ],
     });
