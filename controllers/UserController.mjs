@@ -102,6 +102,10 @@ export default class UserController extends BaseController {
       where: {
         // don't get the user themselves
         id: { [Op.not]: user.id },
+        // ensure that users have the same purpose
+        '$purposes.id$': {
+          [Op.in]: purposeArray,
+        },
         // don't get users that the user has already swiped on
         [Op.or]: [
           {
@@ -113,47 +117,17 @@ export default class UserController extends BaseController {
           // the entry would not return
           { '$swipedBy.id$': null },
         ],
-        // ensures users shown have the same purpose
-        '$purposes.id$': {
-          [Op.in]: purposeArray,
-        },
-        [Op.or]: [
-          {
-            '$matchedBy.matcher_id$': {
-              [Op.not]: user.id,
-            },
-          },
-          { '$matchedBy.id$': null },
-        ],
-        [Op.or]: [
-          {
-            '$matchedOn.matcher_id$': {
-              [Op.not]: user.id,
-            },
-          },
-          { '$matchedBy.id$': null },
-        ],
       },
       include: [{
         model: this.db.Swipe,
         as: 'swipedBy',
         required: false,
-        attributes: ['swiper_id', 'swipee_id'],
+        // attributes: ['id', 'swiper_id', 'swipee_id'],
       },
       {
         model: this.db.Purpose,
         required: false,
         as: 'purposes', // alias automatically created by sequelize
-      },
-      {
-        model: this.db.Match,
-        required: false,
-        as: 'matchedBy',
-      },
-      {
-        model: this.db.Match,
-        required: false,
-        as: 'matchedOn',
       },
       ],
     });

@@ -43,9 +43,7 @@ const Profilecard = ({ user, swipe, isTop }) => {
     animation.start({ rotate: direction === 'right' ? 15 : -15 });
   };
 
-  const changePointer = () => {
-    setIsGrabbing(!isGrabbing);
-  };
+  const changePointer = () => setIsGrabbing(!isGrabbing);
 
   return (
     <motion.div
