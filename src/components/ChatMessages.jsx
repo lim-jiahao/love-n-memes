@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
+import axios from 'axios';
 
-const ChatMessages = ({ id, user }) => {
+const ChatMessages = ({ matchId, user }) => {
   const [socket, setSocket] = useState();
   const [messages, setMessages] = useState([]);
   const [typedMsg, setTypedMsg] = useState('');
 
   useEffect(() => {
+    let resp;
+    (async () => {
+      resp = await axios.get(`/api/message/${matchId}`);
+      const prevMsgs = resp.data.messages.map((msg) => `${msg.sender}: ${msg.body}`);
+      setMessages(prevMsgs);
+    })();
     const newSocket = io();
-    newSocket.emit('subscribe', id);
+    newSocket.emit('subscribe', matchId);
 
     newSocket.on('chatMessage', ([msg, username]) => {
       setMessages((prevState) => [...prevState, `${username}: ${msg}`]);
@@ -16,15 +23,22 @@ const ChatMessages = ({ id, user }) => {
 
     setSocket(newSocket);
     return () => newSocket.close();
-  }, [id]);
+  }, [matchId]);
 
-  const handleMsgSend = (e) => {
+  const handleMsgSend = async (e) => {
     e.preventDefault();
 
     if (typedMsg === '') return;
-
-    socket.emit('chat', [typedMsg, user]);
-    setTypedMsg('');
+    try {
+      const data = { message: typedMsg, user };
+      const resp = await axios.post(`/api/message/${matchId}`, data);
+      if (resp.data.message.body) {
+        socket.emit('chat', [resp.data.message.body, user]);
+        setTypedMsg('');
+      }
+    } catch (err) {
+      console.error(err.response);
+    }
   };
 
   return (

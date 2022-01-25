@@ -32,8 +32,7 @@ export default class MatchController extends BaseController {
 
       const matches = matchesResult.map((m) => {
         const match = m.matcherId === req.userId ? m.matchee : m.matcher;
-        const roomId = `${m.matcherId}-${m.matcheeId}`;
-        return { id: m.id, match, roomId };
+        return { id: m.id, match };
       });
       res.json({ matches });
     } catch (err) {
