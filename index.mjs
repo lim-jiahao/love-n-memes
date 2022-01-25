@@ -1,8 +1,11 @@
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import dotenv from 'dotenv';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 import bindRoutes from './routers/index.mjs';
 import checkAuth from './middleware/auth.mjs'
+import initialiseChatSockets from './utils/chat.mjs';
 
 dotenv.config();
 const PORT = process.env.PORT || 3004;
@@ -14,6 +17,10 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use(express.static('dist'));
 app.use(express.static('uploads'));
+
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+initialiseChatSockets(io);
 
 // Set up Webpack in dev env
 const env = process.env.NODE_ENV || 'development';
@@ -43,6 +50,6 @@ app.use(checkAuth)
 bindRoutes(app);
 
 // Set Express to listen on the given port
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });

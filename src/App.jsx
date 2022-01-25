@@ -7,6 +7,7 @@ import Home from './components/Home.jsx';
 import Login from './components/Login.jsx';
 import Signup from './components/Signup.jsx';
 import Profile from './components/Profile.jsx';
+import ChatsList from './components/ChatsList.jsx';
 
 const App = () => {
   const [auth, setAuth] = useState(false);
@@ -60,6 +61,10 @@ const App = () => {
           <Route
             path="profile"
             element={auth ? <Profile setAuth={setAuth} user={user} /> : <Login setAuth={setAuth} />}
+          />
+          <Route
+            path="chats"
+            element={auth ? <ChatsList user={user} /> : <Login setAuth={setAuth} />}
           />
         </Routes>
 
