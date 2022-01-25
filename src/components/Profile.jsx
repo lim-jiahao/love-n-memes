@@ -8,13 +8,15 @@ const Profile = ({ user, setAuth }) => {
   const [disableSubmit, setDisableSubmit] = useState(true);
   const [memes, setMemes] = useState([]);
 
-  useEffect(async () => {
-    try {
-      const resp = await axios.get(`/api/profile/picture/${user}`);
-      setMemes(resp.data.pictures);
-    } catch (err) {
-      console.error(err.response);
-    }
+  useEffect(() => {
+    (async () => {
+      try {
+        const resp = await axios.get(`/api/profile/picture/${user}`);
+        setMemes(resp.data.pictures);
+      } catch (err) {
+        console.error(err.response);
+      }
+    })();
   }, []);
 
   const fileInputRef = useRef();

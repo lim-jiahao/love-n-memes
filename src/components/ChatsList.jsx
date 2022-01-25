@@ -6,14 +6,16 @@ const ChatsList = ({ user }) => {
   const [matches, setMatches] = useState([]);
   const [selectedMatchId, setSelectedMatchId] = useState(null);
 
-  useEffect(async () => {
-    try {
-      const headers = { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } };
-      const resp = await axios.get('/api/match/all', headers);
-      setMatches(resp.data.matches);
-    } catch (err) {
-      console.error(err.response);
-    }
+  useEffect(() => {
+    (async () => {
+      try {
+        const headers = { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } };
+        const resp = await axios.get('/api/match/all', headers);
+        setMatches(resp.data.matches);
+      } catch (err) {
+        console.error(err.response);
+      }
+    })();
   }, []);
 
   const handleUserClick = (i) => {
