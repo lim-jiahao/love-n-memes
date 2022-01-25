@@ -31,9 +31,10 @@ const Profilecard = ({ user, swipe, isTop }) => {
     // reset rotation
     animation.start({ rotate: 0 });
     if (dragDirection && Math.abs(x.get()) > elWidth / 2) {
-      animation.start({ x: moveMagnitude, transition: { duration: 0.2 } });
+      animation.start({ x: moveMagnitude, transition: { duration: 0.4 } });
       const swipedRight = moveMagnitude >= 1;
       swipe(swipedRight);
+      setTimeout(() => cardEl.current.remove(), 400);
     }
   };
 

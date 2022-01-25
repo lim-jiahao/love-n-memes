@@ -37,7 +37,7 @@ const ProfileDeck = ({ onVote }) => {
 
   console.log(currentUser, 'currentUser');
   return (
-    <div className="overflow-hidden pt-40 w-full">
+    <div className="overflow-hidden pt-40 w-screen overflow-x-hidden">
 
       {users.length >= 1 && users.map((user, i) => {
         const isTop = i === users.length - 1;
