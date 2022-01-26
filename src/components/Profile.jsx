@@ -1,16 +1,16 @@
 import axios from 'axios';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   LocationMarkerIcon, BriefcaseIcon, PhotographIcon, PencilAltIcon,
 } from '@heroicons/react/outline';
+import { useNavigate } from 'react-router-dom';
 import Logout from './Logout.jsx';
 
-const Profile = ({ user, setAuth }) => {
-  const [file, setFile] = useState(null);
-  const [errMsg, setErrMsg] = useState('');
-  const [disableSubmit, setDisableSubmit] = useState(true);
+const Profile = ({ setAuth }) => {
   const [memes, setMemes] = useState([]);
   const [curUser, setCurUser] = useState({});
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -28,92 +28,8 @@ const Profile = ({ user, setAuth }) => {
     })();
   }, []);
 
-  const fileInputRef = useRef();
-
-  const checkType = (curFile) => ['image/png', 'image/jpeg', 'image/gif'].some((type) => curFile.type === type);
-
-  // approx 2MB, if they got meme larger then wtf no
-  const checkFileSize = (curFile) => curFile.size <= 2097152;
-
-  const handleFileChange = (e) => {
-    const curFile = e.target.files[0];
-
-    if (!curFile) {
-      setErrMsg('');
-      setFile(null);
-      setDisableSubmit(true);
-      return;
-    }
-
-    const isValidType = checkType(curFile);
-    const isValidFileSize = checkFileSize(curFile);
-
-    if (!isValidType || !isValidFileSize) {
-      if (!isValidType) setErrMsg('Invalid file type!');
-      else setErrMsg('Image too big. Max file size is 2MB.');
-
-      setFile(null);
-      setDisableSubmit(true);
-      return;
-    }
-
-    setFile(curFile);
-    setErrMsg('');
-    setDisableSubmit(false);
-  };
-
-  const handleImageUpload = async (e) => {
-    e.preventDefault();
-
-    try {
-      const config = {
-        headers: {
-          'content-type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        },
-      };
-      const formData = new FormData();
-      formData.append('picture', file);
-      const resp = await axios.post('/api/profile/picture', formData, config);
-      if (resp) {
-        setFile(null);
-        setDisableSubmit(true);
-        setMemes([...memes, resp.data.picture]);
-        fileInputRef.current.value = null;
-      }
-    } catch (err) {
-      console.error(err.response);
-    }
-  };
-
-  const handleImageClick = async (filename) => {
-    try {
-      await axios.delete(`/api/profile/picture/${filename}`);
-      const memesCopy = [...memes].filter((meme) => meme.filename !== filename);
-      setMemes(memesCopy);
-    } catch (err) {
-      console.error(err.response);
-    }
-  };
-
   return (
     <div className="flex flex-col items-center">
-      {/* {memes.length > 0
-        ? (
-          <div className="flex">
-            {memes.map((meme, index) => (
-              <div className="flex flex-col justify-end">
-                <img width={100} height={100} src={meme.filename} alt={`meme-${index}`} />
-                <button type="button" onClick={() => handleImageClick(meme.filename)}>X</button>
-              </div>
-            ))}
-          </div>
-        ) : <p>No memes yet! Get uploading!</p>}
-      <form onSubmit={handleImageUpload}>
-        <input type="file" name="picture" ref={fileInputRef} onChange={handleFileChange} />
-        <input type="submit" value="Upload" disabled={disableSubmit} />
-      </form>
-      <p>{errMsg}</p> */}
       <img className="w-36 h-36 rounded-full border-4 border-black" src={memes.length > 0 ? memes[0].filename : 'https://picsum.photos/seed/picsum/200/300'} alt="meme" />
       <div className="text-black mb-3">
         <div className="mb-1">
@@ -132,7 +48,7 @@ const Profile = ({ user, setAuth }) => {
         </div>
       </div>
 
-      <button className="flex items-center justify-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded-full" type="button">
+      <button className="flex items-center justify-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded-full" onClick={() => navigate('/profile/upload')} type="button">
         <PhotographIcon className="h-5 w-5 mr-1" />
         Upload Memes
       </button>
