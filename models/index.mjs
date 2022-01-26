@@ -97,8 +97,8 @@ db.Match.belongsTo(db.User, {
 });
 
 // define user-message relationship
-db.Message.belongsTo(db.User);
-db.User.hasMany(db.Message);
+// db.Message.belongsTo(db.User);
+// db.User.hasMany(db.Message);
 
 // define match-message relationship
 db.Message.belongsTo(db.Match);

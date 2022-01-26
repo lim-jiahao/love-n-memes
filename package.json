@@ -72,6 +72,8 @@
     "jwt-decode": "^3.1.2",
     "multer": "^1.4.4",
     "pg": "^8.5.1",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1"
   }
 }

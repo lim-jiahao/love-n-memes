@@ -9,16 +9,18 @@ const ProfileDeck = ({ onVote }) => {
 
   const headers = { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } };
 
-  useEffect(async () => {
-    try {
-      const response = await axios.get('/api/user/unswiped', headers);
-      const receivedUsers = response.data.users;
-      console.log(receivedUsers);
-      setUsers(receivedUsers);
-      setCurrentUser(receivedUsers[receivedUsers.length - 1]);
-    } catch (err) {
-      console.log(err);
-    }
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get('/api/user/unswiped', headers);
+        const receivedUsers = response.data.users;
+        console.log(receivedUsers);
+        setUsers(receivedUsers);
+        setCurrentUser(receivedUsers[receivedUsers.length - 1]);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
   }, []);
 
   const swipe = async (swipedRight) => {
