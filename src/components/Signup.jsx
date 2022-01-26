@@ -12,6 +12,7 @@ const Signup = ({ setAuth }) => {
   const [password, setPassword] = useState('');
   const [age, setAge] = useState(18);
   const [location, setLocation] = useState('');
+  const [occupation, setOccupation] = useState('');
   const [bio, setBio] = useState('');
   const [selectedGender, setSelectedGender] = useState(0); // selected index
   const [purposesChecked, setPurposesChecked] = useState(new Array(purposes.length).fill(false));
@@ -38,6 +39,7 @@ const Signup = ({ setAuth }) => {
       password,
       age,
       location,
+      occupation,
       bio,
       selectedGender,
       purposesChecked,
@@ -103,6 +105,13 @@ const Signup = ({ setAuth }) => {
             <label className="block mb-2 text-indigo-500" htmlFor="age">
               Age
               <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" type="number" name="age" value={age} min={18} onChange={(e) => setAge(e.target.value)} required />
+            </label>
+          </div>
+
+          <div>
+            <label className="block mb-2 text-indigo-500" htmlFor="occupation">
+              Occupation
+              <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="occupation" value={occupation} onChange={(e) => setOccupation(e.target.value)} required />
             </label>
           </div>
 

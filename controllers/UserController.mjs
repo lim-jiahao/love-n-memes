@@ -54,6 +54,7 @@ export default class UserController extends BaseController {
         email: req.body.email,
         password: hashedPassword,
         location: req.body.location,
+        occupation: req.body.occupation,
         age: req.body.age,
         bio: req.body.bio,
         genderId: req.body.selectedGender + 1,
@@ -94,41 +95,63 @@ export default class UserController extends BaseController {
       },
       ],
     });
+
+    const interestArray = user.interests.map((interest) => interest.id);
     const purposeArray = user.purposes.map((purpose) => purpose.id);
-    console.log(user, 'user');
-    console.log(purposeArray, 'purposes');
+    const swipes = await this.db.Swipe.findAll({ where: { swiperId: user.id } });
+    const swipedUsersArray = swipes.map((swipe) => swipe.swipeeId);
+
+    console.log(user);
     // queries for all users except the user themselve and all the past users they have swiped on
     const rows = await this.model.findAll({
       where: {
-        // don't get the user themselves
-        id: { [Op.not]: user.id },
+        // users dont get themselves & users that they have already swiped on
+        id: {
+          [Op.and]: [
+            { [Op.not]: user.id },
+            { [Op.notIn]: swipedUsersArray },
+          ],
+        },
+
+        // ensure mutual interest between the users
+        [Op.and]: [
+          {
+            genderId: {
+              [Op.in]: interestArray,
+            },
+          },
+          {
+            '$interests.id$': {
+              [Op.eq]: user.genderId,
+            },
+          },
+        ],
+
         // ensure that users have the same purpose
         '$purposes.id$': {
           [Op.in]: purposeArray,
         },
-        // don't get users that the user has already swiped on
-        [Op.or]: [
-          {
-            '$swipedBy.swiper_id$': {
-              [Op.not]: user.id,
-            },
-          },
-          // need this here because if the swipedBy array is empty
-          // the entry would not return
-          { '$swipedBy.id$': null },
-        ],
+
       },
-      include: [{
-        model: this.db.Swipe,
-        as: 'swipedBy',
-        required: false,
-        // attributes: ['id', 'swiper_id', 'swipee_id'],
-      },
-      {
-        model: this.db.Purpose,
-        required: false,
-        as: 'purposes', // alias automatically created by sequelize
-      },
+      include: [
+        {
+          model: this.db.Swipe,
+          as: 'swipedBy',
+          required: false,
+        },
+        {
+          model: this.db.Purpose,
+          required: false,
+          as: 'purposes', // alias automatically created by sequelize
+        },
+        {
+          model: this.db.Interest,
+          required: false,
+          as: 'interests',
+        },
+        {
+          model: this.db.Picture,
+        },
       ],
     });
     // TODO: remove if id in matches

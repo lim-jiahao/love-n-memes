@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import ProfileCard from './ProfileCard.jsx';
+import ProfileCard from './Card/ProfileCard.jsx';
 
 const ProfileDeck = ({ onVote }) => {
   const [users, setUsers] = useState([]);
@@ -39,7 +39,7 @@ const ProfileDeck = ({ onVote }) => {
 
   console.log(currentUser, 'currentUser');
   return (
-    <div className="overflow-hidden pt-40 w-full">
+    <div className="overflow-hidden pt-40 w-screen overflow-x-hidden">
 
       {users.length >= 1 && users.map((user, i) => {
         const isTop = i === users.length - 1;
