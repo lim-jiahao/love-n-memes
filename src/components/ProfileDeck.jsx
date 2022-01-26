@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import ProfileCard from './ProfileCard.jsx';
+import ProfileCard from './Card/ProfileCard.jsx';
 
 const ProfileDeck = ({ onVote }) => {
   const [users, setUsers] = useState([]);

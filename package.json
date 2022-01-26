@@ -62,6 +62,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
+    "@heroicons/react": "^1.0.5",
     "cookie-parser": "^1.4.5",
     "dotenv": "^14.2.0",
     "express": "^4.17.1",

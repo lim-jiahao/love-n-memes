@@ -33,6 +33,7 @@ module.exports = {
         email: `${faker.internet.email(firstName, String(_.random(1000)))}`,
         password: passwordHash,
         location: 'Singapore',
+        occupation: `${faker.name.jobTitle()}`,
         age: _.random(18, 50),
         bio: `${faker.random.words(5)}`,
         gender_id: _.random(1, 2),

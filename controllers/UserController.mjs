@@ -54,6 +54,7 @@ export default class UserController extends BaseController {
         email: req.body.email,
         password: hashedPassword,
         location: req.body.location,
+        occupation: req.body.occupation,
         age: req.body.age,
         bio: req.body.bio,
         genderId: req.body.selectedGender + 1,
