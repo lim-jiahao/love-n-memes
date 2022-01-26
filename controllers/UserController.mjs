@@ -127,10 +127,6 @@ export default class UserController extends BaseController {
           },
         ],
 
-        genderId: {
-          [Op.in]: interestArray,
-        },
-
         // ensure that users have the same purpose
         '$purposes.id$': {
           [Op.in]: purposeArray,
@@ -152,6 +148,9 @@ export default class UserController extends BaseController {
           model: this.db.Interest,
           required: false,
           as: 'interests',
+        },
+        {
+          model: this.db.Picture,
         },
       ],
     });

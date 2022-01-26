@@ -63,7 +63,7 @@ const Profilecard = ({ user, swipe, handleClick }) => {
   const changePointer = () => setIsGrabbing(!isGrabbing);
 
   const backgroundStyle = {
-    backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(35, 31, 32, 1)), url('https://picsum.photos/seed/picsum/200/300')",
+    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(35, 31, 32, 1)), url(${user.pictures.length > 0 ? user.pictures[0].filename : 'https://picsum.photos/seed/picsum/200/300'})`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
   };
@@ -75,7 +75,7 @@ const Profilecard = ({ user, swipe, handleClick }) => {
   return (
     <motion.div
       ref={cardEl}
-      className={`absolute ml-auto mr-auto w-80 left-0  right-0 ${isGrabbing ? 'cursor-grabbing' : 'cursor-grab'}`}
+      className={`absolute ml-auto mr-auto w-80 left-0 rotate-6  right-0 ${isGrabbing ? 'cursor-grabbing' : 'cursor-grab'}`}
       onMouseDown={changePointer}
       onMouseUp={changePointer}
       animate={animation}
@@ -89,7 +89,7 @@ const Profilecard = ({ user, swipe, handleClick }) => {
       drag="x"
       style={{ x }}
     >
-      <div className="bg-white min-h-full h-96 font-semibold  flex flex-col justify-end shadow-sm text-center rounded-3xl px-4 py-6 max-w-xs" style={backgroundStyle}>
+      <div className={`bg-white min-h-full h-96 font-semibold shad flex flex-col justify-end shadow-sm text-center rounded-3xl px-4 py-6 max-w-xs rotate-${randomDegree} shadow-lg`} style={backgroundStyle}>
         {/* <img className="mb-3 w-32 h-32 rounded-full mx-auto" src="https://picsum.photos/seed/picsum/200/300" alt="product designer" /> */}
         <div className="text-slate-50 text-left">
           <div className="mb-1">
