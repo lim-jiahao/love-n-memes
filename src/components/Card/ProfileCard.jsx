@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 import React, { useRef, useState } from 'react';
 import {
-  motion, useAnimation, useMotionValue,
+  motion, useAnimation, useMotionValue, AnimatePresence,
 } from 'framer-motion';
 import { LocationMarkerIcon, BriefcaseIcon } from '@heroicons/react/outline';
 import { InformationCircleIcon } from '@heroicons/react/solid';
@@ -12,7 +12,9 @@ const pics = [
   'https://picsum.photos/id/3/200/300',
 ];
 
-const Profilecard = ({ user, swipe, handleClick }) => {
+const Profilecard = ({
+  user, swipe,
+}) => {
   const [isGrabbing, setIsGrabbing] = useState(false);
   const [dragDirection, setDragDirection] = useState();
 
@@ -36,13 +38,17 @@ const Profilecard = ({ user, swipe, handleClick }) => {
       ? -(distance)
       : distance;
 
-    // reset rotation
-    animation.start({ rotate: 0 });
-    if (dragDirection && Math.abs(x.get()) > elWidth / 2) {
-      animation.start({ x: moveMagnitude, transition: { duration: 0.4 } });
+    if (dragDirection && Math.abs(x.get()) > elWidth / 1.25) {
+      animation.start({
+        x: moveMagnitude,
+        transition: { duration: 0.4 },
+      });
       const swipedRight = moveMagnitude >= 1;
       swipe(swipedRight, animation);
       setTimeout(() => cardEl.current.remove(), 400);
+    } else {
+      // reset rotation
+      animation.start({ rotate: 0 });
     }
   };
 
@@ -68,20 +74,14 @@ const Profilecard = ({ user, swipe, handleClick }) => {
     backgroundSize: 'cover',
   };
 
-  const changeBg = () => {
-
-  };
-
   return (
     <motion.div
-      ref={cardEl}
-      className={`absolute ml-auto mr-auto w-80 left-0 rotate-6  right-0 ${isGrabbing ? 'cursor-grabbing' : 'cursor-grab'}`}
-      onMouseDown={changePointer}
-      onMouseUp={changePointer}
+      className="absolute right-0 top-20 left-8 ml-auto mr-auto w-80"
       animate={animation}
       dragConstraints={{
         left: 0, right: 0, top: 0, bottom: 0,
       }}
+      ref={cardEl}
       dragElastic={1}
       onDrag={handleDrag}
       onDragStart={handleDragStart}
@@ -89,7 +89,10 @@ const Profilecard = ({ user, swipe, handleClick }) => {
       drag="x"
       style={{ x }}
     >
-      <div className={`bg-white min-h-full h-96 font-semibold shad flex flex-col justify-end shadow-sm text-center rounded-3xl px-4 py-6 max-w-xs rotate-${randomDegree} shadow-lg`} style={backgroundStyle}>
+      <div
+        className={`bg-black absolute  min-h-full h-96 font-semibold flex flex-col justify-end  text-center rounded-3xl px-4 py-6 max-w-xs shadow-lg ${isGrabbing ? 'cursor-grabbing' : 'cursor-grab'}`}
+        style={backgroundStyle}
+      >
         {/* <img className="mb-3 w-32 h-32 rounded-full mx-auto" src="https://picsum.photos/seed/picsum/200/300" alt="product designer" /> */}
         <div className="text-slate-50 text-left">
           <div className="mb-1">
@@ -109,6 +112,7 @@ const Profilecard = ({ user, swipe, handleClick }) => {
         </div>
       </div>
     </motion.div>
+
   );
 };
 

@@ -1,13 +1,21 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+
+import { motion, useAnimation } from 'framer-motion';
+
 import ProfileCard from './Card/ProfileCard.jsx';
+import MatchAnimation from './Card/MatchAnimation.jsx';
+import TestAnimation from './Card/testAnimation.jsx';
 
-const ProfileDeck = ({ onVote }) => {
+const ProfileDeck = () => {
   const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState();
   const [message, setMessage] = useState('');
+  const [match, setMatch] = useState(false);
 
-  const headers = { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } };
+  const headers = {
+    headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` },
+  };
 
   useEffect(() => {
     (async () => {
@@ -27,26 +35,38 @@ const ProfileDeck = ({ onVote }) => {
     // defo better logic can be used here just wanna get it working for now
     try {
       const tempUser = [...users];
-
+      // const response = await axios.post('/api/swipe/create', { swipeeId: currentUser.id, swipedRight }, headers);
+      // console.log(response.data);
+      // setMessage(response.data.message);
       setCurrentUser(tempUser[tempUser.indexOf(currentUser) - 1]);
-      const response = await axios.post('/api/swipe/create', { swipeeId: currentUser.id, swipedRight }, headers);
-      console.log(response.data);
-      setMessage(response.data.message);
     } catch (err) {
       console.log(err.response.data);
     }
   };
 
-  console.log(currentUser, 'currentUser');
-  return (
-    <div className="overflow-hidden pt-40 w-screen overflow-x-hidden">
+  const controls = useAnimation();
 
-      {users.length >= 1 && users.map((user, i) => {
-        const isTop = i === users.length - 1;
-        return (
-          <ProfileCard key={user.name} isTop={isTop} swipe={swipe} user={user} />
-        );
-      })}
+  const handleClick = () => {
+    setMatch(!match);
+  };
+
+  return (
+    <div className="w-full ">
+      <div
+        className="w-full relative"
+      >
+        {users.length > 0 && users.map((user) => (
+          <ProfileCard
+            key={user.name}
+            swipe={swipe}
+            user={user}
+          />
+        ))}
+      </div>
+
+      <MatchAnimation match={match} />
+
+      <button onClick={handleClick}> match</button>
     </div>
   );
 };
