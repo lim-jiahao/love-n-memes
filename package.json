@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack_conf/webpack.prod.js",
     "start": "node index.mjs",
-    "watch": "nodemon index.mjs"
+    "watch": "nodemon index.mjs",
+    "reset": "dropdb love_n_memes && npx sequelize db:create && npx sequelize db:migrate && npx sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,7 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-react": "^7.12.10",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
+    "autoprefixer": "^10.4.2",
     "axios": "^0.21.1",
     "babel-loader": "^8.2.2",
     "css-loader": "^5.0.1",
@@ -40,6 +42,8 @@
     "html-webpack-plugin": "^4.5.1",
     "mini-css-extract-plugin": "^1.3.3",
     "nodemon": "^2.0.7",
+    "postcss": "^8.4.5",
+    "postcss-loader": "^6.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-refresh": "^0.9.0",
@@ -47,6 +51,8 @@
     "sass": "^1.32.2",
     "sass-loader": "^10.1.0",
     "sequelize-cli": "^6.2.0",
+    "style-loader": "^3.3.1",
+    "tailwindcss": "^3.0.15",
     "webpack": "^5.11.1",
     "webpack-cli": "^4.3.1",
     "webpack-dev-middleware": "^4.0.2",
@@ -55,13 +61,19 @@
     "webpack-merge": "^5.7.3"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
+    "@heroicons/react": "^1.0.5",
     "cookie-parser": "^1.4.5",
     "dotenv": "^14.2.0",
     "express": "^4.17.1",
+    "framer-motion": "^6.2.1",
     "jsonwebtoken": "^8.5.1",
     "jssha": "^3.2.0",
     "jwt-decode": "^3.1.2",
+    "multer": "^1.4.4",
     "pg": "^8.5.1",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1"
   }
 }

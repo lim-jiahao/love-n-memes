@@ -22,6 +22,9 @@ export default function initUserModel(sequelize, DataTypes) {
     location: {
       type: DataTypes.STRING,
     },
+    occupation: {
+      type: DataTypes.STRING,
+    },
     age: {
       allowNull: false,
       type: DataTypes.INTEGER,
@@ -29,6 +32,14 @@ export default function initUserModel(sequelize, DataTypes) {
     bio: {
       allowNull: false,
       type: DataTypes.STRING,
+    },
+    genderId: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'genders',
+        key: 'id',
+      },
     },
     createdAt: {
       allowNull: false,

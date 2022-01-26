@@ -8,6 +8,9 @@ import initMessageModel from './message.mjs';
 import initMatchModel from './match.mjs';
 import initPurposeModel from './purpose.mjs';
 import initSwipeModel from './swipe.mjs';
+import initPictureModel from './picture.mjs';
+import initGenderModel from './gender.mjs';
+import initInterestModel from './interest.mjs';
 
 const env = process.env.NODE_ENV || 'development';
 
@@ -43,6 +46,9 @@ db.Match = initMatchModel(sequelize, Sequelize.DataTypes);
 db.Message = initMessageModel(sequelize, Sequelize.DataTypes);
 db.Purpose = initPurposeModel(sequelize, Sequelize.DataTypes);
 db.Swipe = initSwipeModel(sequelize, Sequelize.DataTypes);
+db.Picture = initPictureModel(sequelize, Sequelize.DataTypes);
+db.Gender = initGenderModel(sequelize, Sequelize.DataTypes);
+db.Interest = initInterestModel(sequelize, Sequelize.DataTypes);
 
 // define user-purpose relationship
 db.Purpose.belongsToMany(db.User, { through: 'users_purposes' });
@@ -91,12 +97,24 @@ db.Match.belongsTo(db.User, {
 });
 
 // define user-message relationship
-db.Message.belongsTo(db.User);
-db.User.hasMany(db.Message);
+// db.Message.belongsTo(db.User);
+// db.User.hasMany(db.Message);
 
 // define match-message relationship
 db.Message.belongsTo(db.Match);
 db.Match.hasMany(db.Message);
+
+// define user-picture relationship
+db.Picture.belongsTo(db.User);
+db.User.hasMany(db.Picture);
+
+// define user-gender relationship
+db.User.belongsTo(db.Gender);
+db.Gender.hasMany(db.User);
+
+// define user-interest relationship (i.e. interested in male/female/both)
+db.Interest.belongsToMany(db.User, { through: 'users_interests' });
+db.User.belongsToMany(db.Interest, { through: 'users_interests' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

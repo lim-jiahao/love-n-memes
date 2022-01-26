@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
-  BrowserRouter, Routes, Route, Link, Navigate,
+  BrowserRouter, Routes, Route, NavLink, Navigate,
 } from 'react-router-dom';
 import decode from 'jwt-decode';
 import Home from './components/Home.jsx';
 import Login from './components/Login.jsx';
 import Signup from './components/Signup.jsx';
-import Logout from './components/Logout.jsx';
+import Profile from './components/Profile.jsx';
+import ChatsList from './components/ChatsList.jsx';
 
 const App = () => {
   const [auth, setAuth] = useState(false);
@@ -37,42 +38,39 @@ const App = () => {
   });
 
   return (
-    <>
+    <div className="max-w-7xl p-20 m-auto">
       <BrowserRouter>
-        <nav>
-          <Link to="/">Home</Link>
-          {!auth && (
-            <>
-              {' '}
-              |
-              {' '}
-              <Link to="/login">Log In</Link>
-              {' '}
-              |
-              {' '}
-              <Link to="/signup">Sign Up</Link>
-            </>
-          )}
-        </nav>
-
         {auth && (
-          <div>
-            <span>
-              Currently logged in as
-              {' '}
-              {user}
-            </span>
-            <Logout setAuth={setAuth} />
+          <div className="w-full">
+            <nav className="flex justify-evenly">
+              <NavLink to="/profile" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-user fa-2x`}><i /></NavLink>
+              <NavLink to="/" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-laugh-squint fa-2x`}><i /></NavLink>
+              <NavLink to="/chats" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-comments fa-2x`}><i /></NavLink>
+
+            </nav>
           </div>
         )}
 
         <Routes>
           <Route path="signup" element={<Signup setAuth={setAuth} />} />
           <Route path="login" element={<Login setAuth={setAuth} />} />
-          <Route path="/" element={auth ? <Home /> : <Navigate replace to="/login" />} />
+          <Route
+            path="/"
+            element={auth ? <Home /> : <Login setAuth={setAuth} />}
+          />
+          <Route
+            path="profile"
+            element={auth ? <Profile setAuth={setAuth} user={user} /> : <Login setAuth={setAuth} />}
+          />
+          <Route
+            path="chats"
+            element={auth ? <ChatsList user={user} /> : <Login setAuth={setAuth} />}
+          />
         </Routes>
+
+        {/* {auth && <Home />} */}
       </BrowserRouter>
-    </>
+    </div>
   );
 };
 
