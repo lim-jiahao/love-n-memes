@@ -158,21 +158,32 @@ export default class UserController extends BaseController {
     res.status(200).send({ users: rows, length: rows.length });
   }
 
+  // async getUser(req, res) {
+  //   try {
+  //     const { userId } = req;
+  //     const user = await this.model.findByPk(userId);
+
+  //     if (!user) {
+  //       res.status(401).json({ error: 'An error occured' });
+  //       return;
+  //     }
+
+  //     res.json({ user });
+  //   } catch (error) {
+  //     res.status(503).send({ error });
+  //   }
+  // }
+
   async addPicture(req, res) {
     try {
-      const user = await this.model.findOne({
-        where: {
-          name: req.body.user,
-        },
-      });
-
-      if (!user) {
-        res.status(401).json({ error: 'An error occured' });
+      if (!req.userId) {
+        res.status(403).send({ message: 'Add picture unauthorized' }).end();
         return;
       }
+
       const picture = await this.db.Picture.create({
         filename: req.file.filename,
-        userId: user.id,
+        userId: req.userId,
       });
 
       res.json({ picture });
@@ -183,18 +194,16 @@ export default class UserController extends BaseController {
 
   async getPictures(req, res) {
     try {
-      const user = await this.model.findOne({
-        where: {
-          name: req.params.user,
-        },
-      });
-
-      if (!user) {
-        res.status(401).json({ error: 'An error occured' });
+      if (!req.userId) {
+        res.status(403).send({ message: 'Get pictures unauthorized' }).end();
         return;
       }
 
-      const pictures = await user.getPictures();
+      const pictures = await this.db.Picture.findAll({
+        where: {
+          userId: req.userId,
+        },
+      });
       res.json({ pictures });
     } catch (error) {
       res.status(503).send({ error });

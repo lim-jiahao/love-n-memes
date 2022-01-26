@@ -11,8 +11,12 @@ const Profile = ({ user, setAuth }) => {
   useEffect(() => {
     (async () => {
       try {
-        const resp = await axios.get(`/api/profile/picture/${user}`);
+        const headers = { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } };
+
+        const resp = await axios.get('/api/profile/picture', headers);
         setMemes(resp.data.pictures);
+
+        // const curUser = await axios.get('/api/user');
       } catch (err) {
         console.error(err.response);
       }
@@ -60,11 +64,11 @@ const Profile = ({ user, setAuth }) => {
       const config = {
         headers: {
           'content-type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
         },
       };
       const formData = new FormData();
       formData.append('picture', file);
-      formData.append('user', user);
       const resp = await axios.post('/api/profile/picture', formData, config);
       if (resp) {
         setFile(null);
