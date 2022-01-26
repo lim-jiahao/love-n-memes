@@ -158,21 +158,24 @@ export default class UserController extends BaseController {
     res.status(200).send({ users: rows, length: rows.length });
   }
 
-  // async getUser(req, res) {
-  //   try {
-  //     const { userId } = req;
-  //     const user = await this.model.findByPk(userId);
+  async getUser(req, res) {
+    try {
+      if (!req.userId) {
+        res.status(403).send({ message: 'Get profile unauthorized' }).end();
+        return;
+      }
+      const user = await this.model.findByPk(req.userId);
 
-  //     if (!user) {
-  //       res.status(401).json({ error: 'An error occured' });
-  //       return;
-  //     }
+      if (!user) {
+        res.status(401).json({ error: 'An error occured' });
+        return;
+      }
 
-  //     res.json({ user });
-  //   } catch (error) {
-  //     res.status(503).send({ error });
-  //   }
-  // }
+      res.json({ user });
+    } catch (error) {
+      res.status(503).send({ error });
+    }
+  }
 
   async addPicture(req, res) {
     try {

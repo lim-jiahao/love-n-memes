@@ -41,7 +41,7 @@ const App = () => {
     <div className="max-w-7xl p-20 m-auto">
       <BrowserRouter>
         {auth && (
-          <div className="w-full">
+          <div className="w-full mb-6">
             <nav className="flex justify-evenly">
               <NavLink to="/profile" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-user fa-2x`}><i /></NavLink>
               <NavLink to="/" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-laugh-squint fa-2x`}><i /></NavLink>
