@@ -9,6 +9,7 @@ import Signup from './components/Signup.jsx';
 import Profile from './components/Profile.jsx';
 import ChatsList from './components/ChatsList.jsx';
 import MemeUpload from './components/MemeUpload.jsx';
+import EditProfile from './components/EditProfile.jsx';
 
 const App = () => {
   const [auth, setAuth] = useState(false);
@@ -66,6 +67,10 @@ const App = () => {
           <Route
             path="profile/upload"
             element={auth ? <MemeUpload /> : <Login setAuth={setAuth} />}
+          />
+          <Route
+            path="profile/edit"
+            element={auth ? <EditProfile /> : <Login setAuth={setAuth} />}
           />
           <Route
             path="chats"

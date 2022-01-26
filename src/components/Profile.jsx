@@ -52,7 +52,7 @@ const Profile = ({ setAuth }) => {
         <PhotographIcon className="h-5 w-5 mr-1" />
         Upload Memes
       </button>
-      <button className="flex items-center justify-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded-full" type="button">
+      <button className="flex items-center justify-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded-full" onClick={() => navigate('/profile/edit')} type="button">
         <PencilAltIcon className="h-5 w-5 mr-1" />
         Edit Info
       </button>

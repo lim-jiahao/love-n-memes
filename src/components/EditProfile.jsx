@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
-const Signup = ({ setAuth }) => {
+const EditProfile = ({ setAuth }) => {
   // this should prob be queried from db by right but its def not changing so just hard code lol
   const purposes = ['Love', 'Friendship'];
   const genders = ['Male', 'Female'];
 
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [age, setAge] = useState(18);
   const [location, setLocation] = useState('');
   const [occupation, setOccupation] = useState('');
@@ -19,6 +17,32 @@ const Signup = ({ setAuth }) => {
   const [purposeMsg, setPurposeMsg] = useState('');
   const [interestsChecked, setInterestsChecked] = useState(new Array(genders.length).fill(false));
   const [interestMsg, setInterestMsg] = useState('');
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const headers = { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } };
+
+        const currentUser = await axios.get('/api/user/self', headers);
+        const userInfo = currentUser.data.user;
+        const purposesTemp = [false, false];
+        userInfo.purposes.forEach((p) => { purposesTemp[p.id - 1] = true; });
+        const interestsTemp = [false, false];
+        userInfo.interests.forEach((i) => { interestsTemp[i.id - 1] = true; });
+
+        setUsername(userInfo.name);
+        setAge(userInfo.age);
+        setLocation(userInfo.location);
+        setOccupation(userInfo.occupation);
+        setBio(userInfo.bio);
+        setSelectedGender(userInfo.genderId - 1);
+        setPurposesChecked(purposesTemp);
+        setInterestsChecked(interestsTemp);
+      } catch (err) {
+        console.error(err.response);
+      }
+    })();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -35,8 +59,6 @@ const Signup = ({ setAuth }) => {
     }
     const data = {
       name: username,
-      email,
-      password,
       age,
       location,
       occupation,
@@ -47,15 +69,10 @@ const Signup = ({ setAuth }) => {
     };
 
     try {
-      const resp = await axios.post('/api/user/signup', data);
-      const { token } = resp.data;
-      if (token) {
-        localStorage.setItem('authToken', token);
-        setAuth(true);
-        navigate('/');
-      }
+      const headers = { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } };
+      const resp = await axios.put('/api/user/self', data, headers);
+      navigate('/profile');
     } catch (err) {
-      setAuth(false);
       console.log(err.response);
     }
   };
@@ -73,31 +90,13 @@ const Signup = ({ setAuth }) => {
   };
 
   return (
-    <div className="flex h-screen">
+    <>
       <div className="max-w-md w-full m-auto bg-indigo-100 rounded p-5">
-        <header>
-          <img className="w-20 mx-auto mb-5" src="logo.png" alt="logo" />
-        </header>
-
         <form onSubmit={handleSignup}>
           <div>
             <label className="block mb-2 text-indigo-500" htmlFor="name">
               Name
               <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="name" value={username} onChange={(e) => setUsername(e.target.value)} required />
-            </label>
-          </div>
-
-          <div>
-            <label className="block mb-2 text-indigo-500" htmlFor="email">
-              Email
-              <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            </label>
-          </div>
-
-          <div>
-            <label className="block mb-2 text-indigo-500" htmlFor="password">
-              Password
-              <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
             </label>
           </div>
 
@@ -162,19 +161,12 @@ const Signup = ({ setAuth }) => {
           </div>
 
           <div>
-            <input className="w-full bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded" type="submit" value="Sign Up" />
+            <input className="w-full bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded" type="submit" value="Update" />
           </div>
         </form>
-
-        <footer className="text-center">
-          <span className="text-sm">
-            Already have an account?
-            <Link to="/login" className="text-indigo-700 hover:text-pink-700"> Log in!</Link>
-          </span>
-        </footer>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Signup;
+export default EditProfile;

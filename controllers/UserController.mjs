@@ -164,7 +164,16 @@ export default class UserController extends BaseController {
         res.status(403).send({ message: 'Get profile unauthorized' }).end();
         return;
       }
-      const user = await this.model.findByPk(req.userId);
+      const user = await this.model.findByPk(req.userId, {
+        include: [
+          {
+            model: this.db.Interest,
+          },
+          {
+            model: this.db.Purpose,
+          },
+        ],
+      });
 
       if (!user) {
         res.status(401).json({ error: 'An error occured' });
@@ -175,6 +184,43 @@ export default class UserController extends BaseController {
     } catch (error) {
       res.status(503).send({ error });
     }
+  }
+
+  async updateUser(req, res) {
+    try {
+      if (!req.userId) {
+        res.status(403).send({ message: 'Edit profile unauthorized' }).end();
+        return;
+      }
+      const user = await this.model.findByPk(req.userId);
+
+      await user.update({
+        name: req.body.name,
+        location: req.body.location,
+        occupation: req.body.occupation,
+        age: req.body.age,
+        bio: req.body.bio,
+        genderId: req.body.selectedGender + 1,
+      });
+
+      await user.removePurposes([1, 2]);
+      await user.removeInterests([1, 2]);
+
+      const promises = [];
+      req.body.purposesChecked.forEach((check, i) => {
+        if (check) {
+          promises.push(this.db.Purpose.findByPk(i + 1).then((purpose) => purpose.addUser(user)));
+        }
+      });
+      req.body.interestsChecked.forEach((check, i) => {
+        if (check) {
+          promises.push(this.db.Interest.findByPk(i + 1).then((intrst) => intrst.addUser(user)));
+        }
+      });
+      await Promise.all(promises);
+
+      res.json({ user });
+    } catch (error) { res.status(503).send({ error }); }
   }
 
   async addPicture(req, res) {
