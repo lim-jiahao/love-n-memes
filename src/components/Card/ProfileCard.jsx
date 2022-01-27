@@ -8,7 +8,7 @@ import CardContent from './CardContent.jsx';
 const ProfileCard = ({
   swipe, user, disabled, onCollapse, onExpand,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const collapseProfile = () => {
     setIsExpanded(false);

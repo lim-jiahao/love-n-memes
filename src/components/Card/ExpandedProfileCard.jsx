@@ -16,8 +16,7 @@ const ExpandedProfileCard = ({ collapseProfile, user, children }) => {
       className="absolute right-0 top-20 left-0 ml-auto mr-auto w-full "
     >
       <div
-        className="bg-slate-500 absolute min-w-full  min-h-full h-96 font-semibold flex flex-col justify-start  text-center rounded-3xl px-4 py-6 max-w-xs shadow-lg"
-        style={backgroundStyle}
+        className="bg-slate-500 absolute min-w-full rounded-lg  min-h-full h-96 font-semibold flex flex-col justify-start  text-center  px-4 py-6 max-w-xs shadow-lg"
       >
         <motion.div
           className="flex"

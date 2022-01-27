@@ -6,7 +6,9 @@ import {
   useMotionValue,
   AnimatePresence,
 } from 'framer-motion';
-import { InformationCircleIcon } from '@heroicons/react/solid';
+import { InformationCircleIcon, UsersIcon } from '@heroicons/react/solid';
+
+import ImageCarousel from './ImageCarousel.jsx';
 
 const CompactProfileCard = ({
   user,
@@ -15,6 +17,7 @@ const CompactProfileCard = ({
   disabled,
   children,
 }) => {
+  console.log(user, 'user');
   const [isGrabbing, setIsGrabbing] = useState(false);
   const [dragDirection, setDragDirection] = useState();
 
@@ -65,19 +68,9 @@ const CompactProfileCard = ({
 
   const changePointer = () => setIsGrabbing(!isGrabbing);
 
-  const backgroundStyle = {
-    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(35, 31, 32, 1)), url(${
-      user.pictures.length > 0
-        ? user.pictures[0].filename
-        : 'https://picsum.photos/seed/picsum/200/300'
-    })`,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-  };
-
   return (
     <motion.div
-      className="absolute right-0 top-20 left-0 ml-auto mr-auto w-72 "
+      className="absolute right-0 top-20 left-0 ml-auto mr-auto w-72 rounded-lg"
       animate={animation}
       dragConstraints={{
         left: 0,
@@ -97,23 +90,35 @@ const CompactProfileCard = ({
         layoutId={`expandable-card-${user.id}`}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.15, duration: 0.4 }}
-        onClick={expandProfile}
+        // onClick={expandProfile}
       >
         <div
-          className={`bg-black absolute min-w-full  min-h-full h-96 font-semibold flex flex-col justify-end  text-center rounded-3xl px-4 py-6 max-w-xs shadow-lg ${
+          className={`bg-slate-500  absolute min-w-full  min-h-full h-96 font-semibold flex flex-col justify-end  text-center rounded-md  max-w-xs shadow-lg ${
             isGrabbing ? 'cursor-grabbing' : 'cursor-grab'
           }`}
-          style={backgroundStyle}
         >
-          <div className="flex">
+          <motion.div
+            className="h-full w-full"
+            transition={{ delay: 0.2 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <ImageCarousel images={user.pictures} />
+          </motion.div>
+          {/* <div className="h-full w-full z-20 bg-slate-800 absolute opacity-40 " /> */}
+          <div className="flex p-4 pb-2 z-30">
             {children}
             <div className="flex justify-end items-end grow">
-              <div>
+              <motion.div
+                transition={{ delay: 0.45 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
                 <InformationCircleIcon
                   onClick={disabled ? undefined : expandProfile}
                   className="h-4 w-4 text-white"
                 />
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
