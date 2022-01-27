@@ -3,11 +3,10 @@ import React, { useRef, useState } from 'react';
 import {
   motion, useAnimation, useMotionValue, AnimatePresence,
 } from 'framer-motion';
-import { LocationMarkerIcon, BriefcaseIcon } from '@heroicons/react/outline';
 import { InformationCircleIcon } from '@heroicons/react/solid';
 
 const CompactProfileCard = ({
-  user, swipe, expandProfile, disabled,
+  user, swipe, expandProfile, disabled, children,
 }) => {
   const [isGrabbing, setIsGrabbing] = useState(false);
   const [dragDirection, setDragDirection] = useState();
@@ -39,7 +38,6 @@ const CompactProfileCard = ({
       });
       const swipedRight = moveMagnitude >= 1;
       swipe(swipedRight, animation);
-      setTimeout(() => cardEl.current.remove(), 400);
     } else {
       // reset rotation
       animation.start({ rotate: 0 });
@@ -71,7 +69,7 @@ const CompactProfileCard = ({
   return (
     <motion.div
       className="absolute right-0 top-20 left-0 ml-auto mr-auto w-72 "
-      layoutId="expandable-card"
+      layoutId={`expandable-card-${user.id}`}
       animate={animation}
       dragConstraints={{
         left: 0, right: 0, top: 0, bottom: 0,
@@ -81,7 +79,7 @@ const CompactProfileCard = ({
       onDrag={handleDrag}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      // drag="x"
+      drag="x"
       style={{ x }}
     >
       <div
@@ -89,22 +87,8 @@ const CompactProfileCard = ({
         style={backgroundStyle}
       >
         <div className="flex">
-          <div className="text-slate-50 text-left">
-            <div className="mb-1">
-              <h1 className="text-4xl inline-block font-bold tracking-wider">
-                {user.name.split(' ')[0]}
-              </h1>
-              <p className="inline-block ml-4 font-light text-3xl">{user.age}</p>
-            </div>
-            <div className="flex items-center">
-              <BriefcaseIcon className="h-4 w-4 mr-2" />
-              <p className="font-light text-sm">{user.occupation}</p>
-            </div>
-            <div className="flex items-center">
-              <LocationMarkerIcon className="h-4 w-4 mr-2" />
-              <p className="font-light text-sm">{user.location}</p>
-            </div>
-          </div>
+
+          {children}
           <div className="flex justify-end items-end grow">
             <div>
               <InformationCircleIcon onClick={disabled ? undefined : expandProfile} className="h-4 w-4 text-white" />
