@@ -4,7 +4,7 @@ import {
   motion,
   useAnimation,
   useMotionValue,
-  AnimatePresence,
+  useTransform,
 } from 'framer-motion';
 import { InformationCircleIcon, UsersIcon } from '@heroicons/react/solid';
 
@@ -90,37 +90,15 @@ const CompactProfileCard = ({
         layoutId={`expandable-card-${user.id}`}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.15, duration: 0.4 }}
+        initial={{ opacity: 0.1 }}
         // onClick={expandProfile}
       >
         <div
-          className={`bg-slate-500  absolute min-w-full  min-h-full h-96 font-semibold flex flex-col justify-end  text-center rounded-md  max-w-xs shadow-lg ${
+          className={`bg-indigo-900  absolute min-w-full  min-h-full h-96 font-semibold flex flex-col justify-end  text-center rounded-md  max-w-xs shadow-lg ${
             isGrabbing ? 'cursor-grabbing' : 'cursor-grab'
           }`}
         >
-          <motion.div
-            className="h-full w-full"
-            transition={{ delay: 0.2 }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <ImageCarousel images={user.pictures} />
-          </motion.div>
-          {/* <div className="h-full w-full z-20 bg-slate-800 absolute opacity-40 " /> */}
-          <div className="flex p-4 pb-2 z-30">
-            {children}
-            <div className="flex justify-end items-end grow">
-              <motion.div
-                transition={{ delay: 0.45 }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <InformationCircleIcon
-                  onClick={disabled ? undefined : expandProfile}
-                  className="h-4 w-4 text-white"
-                />
-              </motion.div>
-            </div>
-          </div>
+          {children}
         </div>
       </motion.div>
     </motion.div>

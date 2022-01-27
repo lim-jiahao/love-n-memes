@@ -6,6 +6,7 @@ const CardContent = ({ user, disabled }) => (
   <motion.div
     layoutId={`card-content-${user.id}`}
     style={{ opacity: disabled ? 0.2 : 1 }}
+    tranisition={{ delay: 0.15 }}
     className="z-20"
   >
     <div className="text-slate-50 text-left">

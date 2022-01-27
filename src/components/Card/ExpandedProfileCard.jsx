@@ -10,21 +10,19 @@ const ExpandedProfileCard = ({ collapseProfile, user, children }) => {
   return (
     <motion.div
       layoutId={`expandable-card-${user.id}`}
-      transition={{ delay: 0.15, duration: 0.4 }}
+      transition={{ delay: 0.15, duration: 0.4, delayChildren: 0.4 }}
       animate={{ opacity: 1 }}
       onClick={collapseProfile}
       className="absolute right-0 top-20 left-0 ml-auto mr-auto w-full "
     >
       <div
-        className="bg-slate-500 absolute min-w-full rounded-lg  min-h-full h-96 font-semibold flex flex-col justify-start  text-center  px-4 py-6 max-w-xs shadow-lg"
+        className="bg-indigo-600 absolute min-w-full rounded-lg  min-h-full h-96 font-semibold flex flex-col justify-start  text-center  px-4 py-6 max-w-xs shadow-lg"
       >
         <motion.div
           className="flex"
         >
           {children}
-          <motion.div transition={{ delay: 0.4 }} animate={{ opacity: 1 }} initial={{ opacity: 0 }}>
-            {user.bio}
-          </motion.div>
+
         </motion.div>
       </div>
     </motion.div>
