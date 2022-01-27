@@ -76,7 +76,7 @@ const Profilecard = ({
 
   return (
     <motion.div
-      className="absolute right-0 top-20 left-8 ml-auto mr-auto w-80"
+      className="absolute right-0 top-20 left-0 ml-auto mr-auto w-72 "
       animate={animation}
       dragConstraints={{
         left: 0, right: 0, top: 0, bottom: 0,
@@ -90,7 +90,7 @@ const Profilecard = ({
       style={{ x }}
     >
       <div
-        className={`bg-black absolute  min-h-full h-96 font-semibold flex flex-col justify-end  text-center rounded-3xl px-4 py-6 max-w-xs shadow-lg ${isGrabbing ? 'cursor-grabbing' : 'cursor-grab'}`}
+        className={`bg-black absolute min-w-full  min-h-full h-96 font-semibold flex flex-col justify-end  text-center rounded-3xl px-4 py-6 max-w-xs shadow-lg ${isGrabbing ? 'cursor-grabbing' : 'cursor-grab'}`}
         style={backgroundStyle}
       >
         {/* <img className="mb-3 w-32 h-32 rounded-full mx-auto" src="https://picsum.photos/seed/picsum/200/300" alt="product designer" /> */}

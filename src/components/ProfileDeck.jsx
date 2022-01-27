@@ -22,7 +22,6 @@ const ProfileDeck = () => {
       try {
         const response = await axios.get('/api/user/unswiped', headers);
         const receivedUsers = response.data.users;
-        console.log(receivedUsers);
         setUsers(receivedUsers);
         setCurrentUser(receivedUsers[receivedUsers.length - 1]);
       } catch (err) {
@@ -39,6 +38,8 @@ const ProfileDeck = () => {
       // console.log(response.data);
       // setMessage(response.data.message);
       setCurrentUser(tempUser[tempUser.indexOf(currentUser) - 1]);
+      setMatch(!match);
+      setTimeout(() => setMatch(false), 2000);
     } catch (err) {
       console.log(err.response.data);
     }
@@ -63,10 +64,11 @@ const ProfileDeck = () => {
           />
         ))}
       </div>
+      <div className="z-10">
 
-      <MatchAnimation match={match} />
+        <MatchAnimation match={match} />
+      </div>
 
-      <button onClick={handleClick}> match</button>
     </div>
   );
 };
