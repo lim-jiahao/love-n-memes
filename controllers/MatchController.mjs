@@ -31,8 +31,10 @@ export default class MatchController extends BaseController {
         {
           model: this.db.Message,
           limit: 1,
+          separate: false,
           order: [['id', 'DESC']],
         }],
+        order: [[this.db.Message, 'createdAt', 'DESC']],
         where: {
           [Op.or]: [
             { '$matcher.id$': req.userId },

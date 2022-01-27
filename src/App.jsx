@@ -74,7 +74,7 @@ const App = () => {
           />
           <Route
             path="chats"
-            element={auth ? <ChatsList user={user} /> : <Login setAuth={setAuth} />}
+            element={auth ? <ChatsList /> : <Login setAuth={setAuth} />}
           />
         </Routes>
 
