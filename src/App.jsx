@@ -8,6 +8,8 @@ import Login from './components/Login.jsx';
 import Signup from './components/Signup.jsx';
 import Profile from './components/Profile.jsx';
 import ChatsList from './components/ChatsList.jsx';
+import MemeUpload from './components/MemeUpload.jsx';
+import EditProfile from './components/EditProfile.jsx';
 
 const App = () => {
   const [auth, setAuth] = useState(false);
@@ -41,7 +43,7 @@ const App = () => {
     <div className="max-w-7xl p-20 m-auto">
       <BrowserRouter>
         {auth && (
-          <div className="w-full">
+          <div className="w-full mb-6">
             <nav className="flex justify-evenly">
               <NavLink to="/profile" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-user fa-2x`}><i /></NavLink>
               <NavLink to="/" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-laugh-squint fa-2x`}><i /></NavLink>
@@ -60,7 +62,15 @@ const App = () => {
           />
           <Route
             path="profile"
-            element={auth ? <Profile setAuth={setAuth} user={user} /> : <Login setAuth={setAuth} />}
+            element={auth ? <Profile setAuth={setAuth} /> : <Login setAuth={setAuth} />}
+          />
+          <Route
+            path="profile/upload"
+            element={auth ? <MemeUpload /> : <Login setAuth={setAuth} />}
+          />
+          <Route
+            path="profile/edit"
+            element={auth ? <EditProfile /> : <Login setAuth={setAuth} />}
           />
           <Route
             path="chats"

@@ -158,21 +158,81 @@ export default class UserController extends BaseController {
     res.status(200).send({ users: rows, length: rows.length });
   }
 
-  async addPicture(req, res) {
+  async getUser(req, res) {
     try {
-      const user = await this.model.findOne({
-        where: {
-          name: req.body.user,
-        },
+      if (!req.userId) {
+        res.status(403).send({ message: 'Get profile unauthorized' }).end();
+        return;
+      }
+      const user = await this.model.findByPk(req.userId, {
+        include: [
+          {
+            model: this.db.Interest,
+          },
+          {
+            model: this.db.Purpose,
+          },
+        ],
       });
 
       if (!user) {
         res.status(401).json({ error: 'An error occured' });
         return;
       }
+
+      res.json({ user });
+    } catch (error) {
+      res.status(503).send({ error });
+    }
+  }
+
+  async updateUser(req, res) {
+    try {
+      if (!req.userId) {
+        res.status(403).send({ message: 'Edit profile unauthorized' }).end();
+        return;
+      }
+      const user = await this.model.findByPk(req.userId);
+
+      await user.update({
+        name: req.body.name,
+        location: req.body.location,
+        occupation: req.body.occupation,
+        age: req.body.age,
+        bio: req.body.bio,
+        genderId: req.body.selectedGender + 1,
+      });
+
+      await user.removePurposes([1, 2]);
+      await user.removeInterests([1, 2]);
+
+      const promises = [];
+      req.body.purposesChecked.forEach((check, i) => {
+        if (check) {
+          promises.push(this.db.Purpose.findByPk(i + 1).then((purpose) => purpose.addUser(user)));
+        }
+      });
+      req.body.interestsChecked.forEach((check, i) => {
+        if (check) {
+          promises.push(this.db.Interest.findByPk(i + 1).then((intrst) => intrst.addUser(user)));
+        }
+      });
+      await Promise.all(promises);
+
+      res.json({ user });
+    } catch (error) { res.status(503).send({ error }); }
+  }
+
+  async addPicture(req, res) {
+    try {
+      if (!req.userId) {
+        res.status(403).send({ message: 'Add picture unauthorized' }).end();
+        return;
+      }
+
       const picture = await this.db.Picture.create({
         filename: req.file.filename,
-        userId: user.id,
+        userId: req.userId,
       });
 
       res.json({ picture });
@@ -183,18 +243,16 @@ export default class UserController extends BaseController {
 
   async getPictures(req, res) {
     try {
-      const user = await this.model.findOne({
-        where: {
-          name: req.params.user,
-        },
-      });
-
-      if (!user) {
-        res.status(401).json({ error: 'An error occured' });
+      if (!req.userId) {
+        res.status(403).send({ message: 'Get pictures unauthorized' }).end();
         return;
       }
 
-      const pictures = await user.getPictures();
+      const pictures = await this.db.Picture.findAll({
+        where: {
+          userId: req.userId,
+        },
+      });
       res.json({ pictures });
     } catch (error) {
       res.status(503).send({ error });
