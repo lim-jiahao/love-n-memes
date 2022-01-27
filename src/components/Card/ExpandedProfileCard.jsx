@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const ExpandedProfileCard = ({ onCollapse, user, children }) => {
+const ExpandedProfileCard = ({ collapseProfile, user, children }) => {
   const backgroundStyle = {
     backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(35, 31, 32, 1)), url(${user.pictures.length > 0 ? user.pictures[0].filename : 'https://picsum.photos/seed/picsum/200/300'})`,
     backgroundRepeat: 'no-repeat',
@@ -10,22 +10,22 @@ const ExpandedProfileCard = ({ onCollapse, user, children }) => {
   return (
     <motion.div
       layoutId={`expandable-card-${user.id}`}
-      transition={{ duration: 0.4 }}
-      initial={{ scale: 1 }}
+      transition={{ delay: 0.15, duration: 0.4 }}
       animate={{ opacity: 1 }}
-      exit={{ scale: 1, transition: { duration: 1 } }}
-      onClick={onCollapse}
+      onClick={collapseProfile}
       className="absolute right-0 top-20 left-0 ml-auto mr-auto w-full "
     >
       <div
-        className="bg-black absolute min-w-full  min-h-full h-96 font-semibold flex flex-col justify-start  text-center rounded-3xl px-4 py-6 max-w-xs shadow-lg $"
+        className="bg-slate-500 absolute min-w-full  min-h-full h-96 font-semibold flex flex-col justify-start  text-center rounded-3xl px-4 py-6 max-w-xs shadow-lg"
         style={backgroundStyle}
       >
         <motion.div
           className="flex"
-
         >
           {children}
+          <motion.div transition={{ delay: 0.4 }} animate={{ opacity: 1 }} initial={{ opacity: 0 }}>
+            {user.bio}
+          </motion.div>
         </motion.div>
       </div>
     </motion.div>

@@ -8,7 +8,7 @@ import CardContent from './CardContent.jsx';
 const ProfileCard = ({
   swipe, user, disabled, onCollapse, onExpand,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const collapseProfile = () => {
     setIsExpanded(false);
@@ -22,7 +22,7 @@ const ProfileCard = ({
   return (
     <AnimateSharedLayout>
       {isExpanded ? (
-        <ExpandedProfileCard onCollapse={collapseProfile} user={user}>
+        <ExpandedProfileCard collapseProfile={collapseProfile} user={user}>
           <CardContent user={user} disabled={disabled} />
         </ExpandedProfileCard>
       ) : (
