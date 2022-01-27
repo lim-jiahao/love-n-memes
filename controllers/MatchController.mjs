@@ -17,10 +17,21 @@ export default class MatchController extends BaseController {
         include: [{
           model: this.db.User,
           as: 'matcher',
+          include: {
+            model: this.db.Picture,
+          },
         },
         {
           model: this.db.User,
           as: 'matchee',
+          include: {
+            model: this.db.Picture,
+          },
+        },
+        {
+          model: this.db.Message,
+          limit: 1,
+          order: [['id', 'DESC']],
         }],
         where: {
           [Op.or]: [
@@ -32,7 +43,7 @@ export default class MatchController extends BaseController {
 
       const matches = matchesResult.map((m) => {
         const match = m.matcherId === req.userId ? m.matchee : m.matcher;
-        return { id: m.id, match };
+        return { id: m.id, match, message: m.messages };
       });
       res.json({ matches });
     } catch (err) {
