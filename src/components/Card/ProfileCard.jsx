@@ -39,7 +39,7 @@ const ProfileCard = ({
             <motion.div className=" p-4 w-1/2" onClick={collapseProfile}>
               <CardContent user={user} disabled={disabled} expanded={isExpanded} />
             </motion.div>
-            <div className="z-10 grow w-full">
+            <div className="grow w-full">
               <ImageCarousel
                 images={user.pictures}
                 expanded={isExpanded}
@@ -57,7 +57,7 @@ const ProfileCard = ({
           expandProfile={expandProfile}
           disabled={disabled}
         >
-          <motion.div className="h-full w-full">
+          <motion.div className="h-full w-full ">
             <ImageCarousel
               images={user.pictures}
               expanded={isExpanded}
@@ -66,7 +66,7 @@ const ProfileCard = ({
               direction={direction}
             />
           </motion.div>
-          <div className="flex p-4 pb-4 z-10">
+          <div className="flex p-4 pb-4 absolute">
             <CardContent user={user} disabled={disabled} expanded={isExpanded} />
             <div className="flex justify-end items-end grow">
               <motion.div
@@ -81,6 +81,7 @@ const ProfileCard = ({
               </motion.div>
             </div>
           </div>
+
         </CompactProfileCard>
       )}
     </AnimateSharedLayout>

@@ -9,7 +9,7 @@ const variants = {
   }),
   center: {
     x: 0,
-    zIndex: 1,
+    zIndex: 0,
     opacity: 1,
   },
   exit: (direction) => ({
@@ -43,9 +43,6 @@ const ImageCarousel = ({
           layoutId="image-carousel"
           transition={{ duration: 0.35, delay: 0.15 }}
         >
-          <div className="bg-white z-20">
-            {page}
-          </div>
           {images.length > 0 && (
             <AnimatePresence initial={false} custom={direction}>
               <motion.img
@@ -56,7 +53,7 @@ const ImageCarousel = ({
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="h-full w-full rounded-3-3xl absolute"
+                className="h-full w-full rounded-3-3xl static"
                 transition={{
                   x: { type: 'tween' },
                   opacity: { duration: 0.1 },
@@ -65,17 +62,17 @@ const ImageCarousel = ({
             </AnimatePresence>
           )}
           <div
-            className="h-full w-10 absolute right-0 top-0 z-50"
+            className="h-full w-10 absolute right-0 top-0"
             onClick={() => paginate(1)}
           />
           <div
-            className="h-full w-10  absolute left-0 top-0 z-50"
+            className="h-full w-10  absolute left-0 top-0"
             onClick={() => paginate(-1)}
           />
         </motion.div>
       ) : (
         <motion.div
-          className="overflow-hidden h-full w-full absolute  z-10"
+          className="overflow-hidden h-full w-full relative"
           layoutId="image-carousel"
           transition={{ duration: 0.1, delay: 0.15 }}
         >
@@ -96,17 +93,17 @@ const ImageCarousel = ({
                 className="h-full w-full absolute rounded-3xl"
               />
               <div
-                className="h-full w-full z-10  absolute rounded-3xl"
+                className="h-full w-full absolute rounded-3xl"
                 style={backgroundStyle}
               />
             </AnimatePresence>
           )}
           <div
-            className="h-full w-10 absolute right-0 top-0 z-50"
+            className="h-full w-10 absolute right-0 top-0"
             onClick={() => paginate(1)}
           />
           <div
-            className="h-full w-10  absolute left-0 top-0 z-50"
+            className="h-full w-10  absolute left-0 top-0"
             onClick={() => paginate(-1)}
           />
         </motion.div>
