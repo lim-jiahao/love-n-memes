@@ -1,22 +1,27 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+
+import { motion, useAnimation } from 'framer-motion';
+
 import ProfileCard from './Card/ProfileCard.jsx';
 
-const ProfileDeck = ({ onVote }) => {
+const ProfileDeck = () => {
   const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState({});
-  const [message, setMessage] = useState('');
+  const [currentUser, setCurrentUser] = useState();
+  const [match, setMatch] = useState(false);
+  const [expandedProfile, setExpandedProfile] = useState();
 
-  const headers = { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } };
+  const headers = {
+    headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` },
+  };
 
   useEffect(() => {
     (async () => {
       try {
         const response = await axios.get('/api/user/unswiped', headers);
         const receivedUsers = response.data.users;
-        console.log(receivedUsers);
         setUsers(receivedUsers);
-        setCurrentUser(receivedUsers[receivedUsers.length - 1]);
+        setCurrentUser(receivedUsers[receivedUsers.length - 1].id);
       } catch (err) {
         console.log(err);
       }
@@ -27,26 +32,34 @@ const ProfileDeck = ({ onVote }) => {
     // defo better logic can be used here just wanna get it working for now
     try {
       const tempUser = [...users];
-
-      setCurrentUser(tempUser[tempUser.indexOf(currentUser) - 1]);
-      const response = await axios.post('/api/swipe/create', { swipeeId: currentUser.id, swipedRight }, headers);
-      console.log(response.data);
-      setMessage(response.data.message);
+      // const response = await axios.post('/api/swipe/create', { swipeeId: currentUser, swipedRight }, headers);
+      setCurrentUser(tempUser[currentUser].id);
+      setMatch(!match);
+      setTimeout(() => setMatch(false), 2000);
     } catch (err) {
-      console.log(err.response.data);
+      console.log(err.response);
     }
   };
-
-  console.log(currentUser, 'currentUser');
+  console.log(expandedProfile, 'expanded');
   return (
-    <div className="overflow-hidden pt-40 w-screen overflow-x-hidden">
-
-      {users.length >= 1 && users.map((user, i) => {
-        const isTop = i === users.length - 1;
-        return (
-          <ProfileCard key={user.name} isTop={isTop} swipe={swipe} user={user} />
-        );
-      })}
+    <div className="w-full ">
+      <div
+        className="w-full relative"
+      >
+        {users.length > 0 && users.map((user) => {
+          const disabled = expandedProfile !== user.id && expandedProfile !== undefined;
+          return (
+            <ProfileCard
+              key={user.name}
+              swipe={swipe}
+              user={user}
+              disabled={disabled}
+              onExpand={() => setExpandedProfile(user.id)}
+              onCollapse={() => setExpandedProfile()}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
