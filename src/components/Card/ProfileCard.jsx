@@ -1,119 +1,86 @@
-/* eslint-disable no-nested-ternary */
-import React, { useRef, useState } from 'react';
-import {
-  motion, useAnimation, useMotionValue, AnimatePresence,
-} from 'framer-motion';
-import { LocationMarkerIcon, BriefcaseIcon } from '@heroicons/react/outline';
+import React, { useState } from 'react';
+import { motion, AnimateSharedLayout } from 'framer-motion';
+
 import { InformationCircleIcon } from '@heroicons/react/solid';
+import CompactProfileCard from './CompactProfileCard.jsx';
+import ExpandedProfileCard from './ExpandedProfileCard.jsx';
+import CardContent from './CardContent.jsx';
+import ImageCarousel from './ImageCarousel.jsx';
 
-const pics = [
-  'https://picsum.photos/id/1/200/300',
-  'https://picsum.photos/id/2/200/300',
-  'https://picsum.photos/id/3/200/300',
-];
-
-const Profilecard = ({
-  user, swipe,
+const ProfileCard = ({
+  swipe, user, disabled, onCollapse, onExpand,
 }) => {
-  const [isGrabbing, setIsGrabbing] = useState(false);
-  const [dragDirection, setDragDirection] = useState();
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [[page, direction], setPage] = useState([0, 0]);
 
-  const animation = useAnimation();
-  const x = useMotionValue(0);
-  const cardEl = useRef();
-
-  const randomDegree = [0, 6][Math.floor(Math.random() * 2)];
-
-  const getDirection = () => {
-    const dragX = x.get();
-    return dragX >= 1 ? 'right' : dragX <= -1 ? 'left' : undefined;
+  const collapseProfile = () => {
+    setIsExpanded(false);
+    onCollapse();
   };
 
-  const handleDragEnd = () => {
-    // getting move magnitude
-    const parentWidth = cardEl.current.parentNode.getBoundingClientRect().width;
-    const elWidth = cardEl.current.getBoundingClientRect().width;
-    const distance = parentWidth + elWidth / 2;
-    const moveMagnitude = dragDirection === 'left'
-      ? -(distance)
-      : distance;
-
-    if (dragDirection && Math.abs(x.get()) > elWidth / 1.25) {
-      animation.start({
-        x: moveMagnitude,
-        transition: { duration: 0.4 },
-      });
-      const swipedRight = moveMagnitude >= 1;
-      swipe(swipedRight, animation);
-      setTimeout(() => cardEl.current.remove(), 400);
-    } else {
-      // reset rotation
-      animation.start({ rotate: 0 });
-    }
+  const expandProfile = () => {
+    setIsExpanded(true);
+    onExpand();
   };
 
-  const handleDrag = () => {
-    const direction = getDirection();
-    if (direction !== dragDirection) {
-      setDragDirection(direction);
-      animation.start({ rotate: direction === 'right' ? 15 : -15 });
-    }
-  };
-
-  const handleDragStart = () => {
-    const direction = getDirection();
-    setDragDirection(direction);
-    animation.start({ rotate: direction === 'right' ? 15 : -15 });
-  };
-
-  const changePointer = () => setIsGrabbing(!isGrabbing);
-
-  const backgroundStyle = {
-    backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(35, 31, 32, 1)), url(${user.pictures.length > 0 ? user.pictures[0].filename : 'https://picsum.photos/seed/picsum/200/300'})`,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
+  const paginate = (newDirection) => {
+    setPage([page + newDirection, newDirection]);
   };
 
   return (
-    <motion.div
-      className="absolute right-0 top-20 left-0 ml-auto mr-auto w-72 "
-      animate={animation}
-      dragConstraints={{
-        left: 0, right: 0, top: 0, bottom: 0,
-      }}
-      ref={cardEl}
-      dragElastic={1}
-      onDrag={handleDrag}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      drag="x"
-      style={{ x }}
-    >
-      <div
-        className={`bg-black absolute min-w-full  min-h-full h-96 font-semibold flex flex-col justify-end  text-center rounded-3xl px-4 py-6 max-w-xs shadow-lg ${isGrabbing ? 'cursor-grabbing' : 'cursor-grab'}`}
-        style={backgroundStyle}
-      >
-        {/* <img className="mb-3 w-32 h-32 rounded-full mx-auto" src="https://picsum.photos/seed/picsum/200/300" alt="product designer" /> */}
-        <div className="text-slate-50 text-left">
-          <div className="mb-1">
-            <h1 className="text-4xl inline-block font-bold tracking-wider">
-              {user.name.split(' ')[0]}
-            </h1>
-            <p className="inline-block ml-4 font-light text-3xl">{user.age}</p>
+    <AnimateSharedLayout>
+      {isExpanded ? (
+        <ExpandedProfileCard collapseProfile={collapseProfile} user={user}>
+          <div className="flex w-full">
+            <motion.div className="z-20 p-4 w-1/2" onClick={collapseProfile}>
+              <CardContent user={user} disabled={disabled} expanded={isExpanded} />
+            </motion.div>
+            <div className="z-10 grow w-full">
+              <ImageCarousel
+                images={user.pictures}
+                expanded={isExpanded}
+                paginate={paginate}
+                page={page}
+                direction={direction}
+              />
+            </div>
           </div>
-          <div className="flex items-center">
-            <BriefcaseIcon className="h-4 w-4 mr-2" />
-            <p className="font-light text-sm">{user.occupation}</p>
+        </ExpandedProfileCard>
+      ) : (
+        <CompactProfileCard
+          user={user}
+          swipe={swipe}
+          expandProfile={expandProfile}
+          disabled={disabled}
+        >
+          <motion.div className="h-full w-full">
+            <ImageCarousel
+              images={user.pictures}
+              expanded={isExpanded}
+              paginate={paginate}
+              page={page}
+              direction={direction}
+            />
+          </motion.div>
+          <div className="flex p-4 pb-4 z-30">
+            <CardContent user={user} disabled={disabled} expanded={isExpanded} />
+            <div className="flex justify-end items-end grow">
+              <motion.div
+                transition={{ delay: 0.2 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <InformationCircleIcon
+                  onClick={disabled ? undefined : expandProfile}
+                  className="h-4 w-4 text-white"
+                />
+              </motion.div>
+            </div>
           </div>
-          <div className="flex items-center">
-            <LocationMarkerIcon className="h-4 w-4 mr-2" />
-            <p className="font-light text-sm">{user.location}</p>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-
+        </CompactProfileCard>
+      )}
+    </AnimateSharedLayout>
   );
 };
 
-export default Profilecard;
+export default ProfileCard;
