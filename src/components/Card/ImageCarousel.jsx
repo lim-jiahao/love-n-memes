@@ -38,9 +38,9 @@ const ImageCarousel = ({ images, expanded }) => {
     <>
       {expanded ? (
         <motion.div
-          className="rounded-lg"
+          className="h-full md:w-full flex items-center"
           layoutId="image-carousel"
-          transition={{ duration: 0.4, delay: 0.15 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
         >
           {images.length > 0 && (
             <AnimatePresence initial={false}>
@@ -52,7 +52,7 @@ const ImageCarousel = ({ images, expanded }) => {
                 initial="enter"
                 animate="center"
                 exit="exit"
-                className="rounded-lg"
+                className="h-full w-full rounded-lg"
                 transition={{
                   x: { type: 'tween' },
                   opacity: { duration: 0.1 },
@@ -73,7 +73,7 @@ const ImageCarousel = ({ images, expanded }) => {
         <motion.div
           className="overflow-hidden h-full w-full absolute  z-10"
           layoutId="image-carousel"
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.2 }}
         >
           {images.length > 0 && (
             <AnimatePresence initial={false}>
@@ -89,10 +89,10 @@ const ImageCarousel = ({ images, expanded }) => {
                   x: { type: 'tween' },
                   opacity: { duration: 0.1 },
                 }}
-                className="h-full w-full absolute rounded-md"
+                className="h-full w-full absolute rounded-3xl"
               />
               <div
-                className="h-full w-full z-10  absolute rounded-lg"
+                className="h-full w-full z-10  absolute rounded-3xl"
                 style={backgroundStyle}
               />
             </AnimatePresence>
