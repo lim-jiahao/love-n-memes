@@ -30,7 +30,7 @@ const CompactProfileCard = ({
 
   const handleDragEnd = () => {
     // getting move magnitude
-    const parentWidth = cardEl.current.parentNode.getBoundingClientRect().width;
+    const parentWidth = cardEl.current.parentNode.parentNode.getBoundingClientRect().width;
     const elWidth = cardEl.current.getBoundingClientRect().width;
     const distance = parentWidth + elWidth / 2;
     const moveMagnitude = dragDirection === 'left' ? -distance : distance;
@@ -67,27 +67,28 @@ const CompactProfileCard = ({
   return (
     <motion.div
       className="absolute right-0 top-20 left-0 ml-auto mr-auto w-72 rounded-3xl"
-      animate={animation}
-      dragConstraints={{
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-      }}
-      ref={cardEl}
-      dragElastic={1}
-      onDrag={handleDrag}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      drag="x"
-      style={{ x }}
+      layoutId={`expandable-card-${user.id}`}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2, delay: 0.2 }}
+      initial={{ opacity: 0.1 }}
     >
       <motion.div
-        layoutId={`expandable-card-${user.id}`}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.2, delayChildren: 0.4 }}
-        initial={{ opacity: 0.1 }}
         // onClick={expandProfile}
+        animate={animation}
+        dragConstraints={{
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+        }}
+        ref={cardEl}
+        dragElastic={1}
+        onDrag={handleDrag}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        drag="x"
+        style={{ x }}
+
       >
         <div
           className={`bg-sky-900  absolute min-w-full  min-h-full h-96 font-semibold flex flex-col justify-end  text-center rounded-3xl  max-w-xs shadow-lg ${

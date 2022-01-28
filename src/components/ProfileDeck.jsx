@@ -21,7 +21,7 @@ const ProfileDeck = () => {
         const response = await axios.get('/api/user/unswiped', headers);
         const receivedUsers = response.data.users;
         setUsers(receivedUsers);
-        setCurrentUser(receivedUsers[receivedUsers.length - 1].id);
+        setCurrentUser(receivedUsers.length - 1);
       } catch (err) {
         console.log(err);
       }
@@ -31,9 +31,8 @@ const ProfileDeck = () => {
   const swipe = async (swipedRight) => {
     // defo better logic can be used here just wanna get it working for now
     try {
-      const tempUser = [...users];
-      const response = await axios.post('/api/swipe/create', { swipeeId: currentUser, swipedRight }, headers);
-      setCurrentUser(tempUser[currentUser].id);
+      const response = await axios.post('/api/swipe/create', { swipeeId: users[currentUser].id, swipedRight }, headers);
+      setCurrentUser(currentUser - 1);
       setMatch(!match);
       setTimeout(() => setMatch(false), 2000);
     } catch (err) {
