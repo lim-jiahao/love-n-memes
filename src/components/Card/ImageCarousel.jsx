@@ -43,6 +43,9 @@ const ImageCarousel = ({
           layoutId="image-carousel"
           transition={{ duration: 0.35, delay: 0.15 }}
         >
+          <div className="bg-white z-20">
+            {page}
+          </div>
           {images.length > 0 && (
             <AnimatePresence initial={false} custom={direction}>
               <motion.img

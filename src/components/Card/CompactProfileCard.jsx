@@ -4,11 +4,7 @@ import {
   motion,
   useAnimation,
   useMotionValue,
-  useTransform,
 } from 'framer-motion';
-import { InformationCircleIcon, UsersIcon } from '@heroicons/react/solid';
-
-import ImageCarousel from './ImageCarousel.jsx';
 
 const CompactProfileCard = ({
   user,

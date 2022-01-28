@@ -32,14 +32,12 @@ const ProfileDeck = () => {
     // defo better logic can be used here just wanna get it working for now
     try {
       const tempUser = [...users];
-      // const response = await axios.post('/api/swipe/create', { swipeeId: currentUser.id, swipedRight }, headers);
-      // console.log(response.data);
-      // setMessage(response.data.message);
-      setCurrentUser(tempUser[tempUser.indexOf(currentUser) - 1]);
+      // const response = await axios.post('/api/swipe/create', { swipeeId: currentUser, swipedRight }, headers);
+      setCurrentUser(tempUser[currentUser].id);
       setMatch(!match);
       setTimeout(() => setMatch(false), 2000);
     } catch (err) {
-      console.log(err.response.data);
+      console.log(err.response);
     }
   };
   console.log(expandedProfile, 'expanded');

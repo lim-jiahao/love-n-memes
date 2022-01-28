@@ -10,7 +10,7 @@ import ImageCarousel from './ImageCarousel.jsx';
 const ProfileCard = ({
   swipe, user, disabled, onCollapse, onExpand,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [[page, direction], setPage] = useState([0, 0]);
 
   const collapseProfile = () => {
@@ -24,7 +24,11 @@ const ProfileCard = ({
   };
 
   const paginate = (newDirection) => {
-    setPage([page + newDirection, newDirection]);
+    const totalPictures = user.pictures.length;
+    let currentPictureIndex = Math.abs(page + newDirection);
+    console.log(currentPictureIndex);
+    currentPictureIndex = (currentPictureIndex >= totalPictures) ? 0 : currentPictureIndex;
+    setPage([currentPictureIndex, newDirection]);
   };
 
   return (
@@ -32,7 +36,7 @@ const ProfileCard = ({
       {isExpanded ? (
         <ExpandedProfileCard collapseProfile={collapseProfile} user={user}>
           <div className="flex w-full">
-            <motion.div className="z-20 p-4 w-1/2" onClick={collapseProfile}>
+            <motion.div className=" p-4 w-1/2" onClick={collapseProfile}>
               <CardContent user={user} disabled={disabled} expanded={isExpanded} />
             </motion.div>
             <div className="z-10 grow w-full">
@@ -62,7 +66,7 @@ const ProfileCard = ({
               direction={direction}
             />
           </motion.div>
-          <div className="flex p-4 pb-4 z-30">
+          <div className="flex p-4 pb-4 z-10">
             <CardContent user={user} disabled={disabled} expanded={isExpanded} />
             <div className="flex justify-end items-end grow">
               <motion.div

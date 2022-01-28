@@ -21,7 +21,6 @@ const ExpandedProfileCard = ({ collapseProfile, user, children }) => {
           className="flex h-full w-full"
         >
           {children}
-
         </motion.div>
       </motion.div>
     </motion.div>
