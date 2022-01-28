@@ -10,7 +10,8 @@ import ImageCarousel from './ImageCarousel.jsx';
 const ProfileCard = ({
   swipe, user, disabled, onCollapse, onExpand,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [[page, direction], setPage] = useState([0, 0]);
 
   const collapseProfile = () => {
     setIsExpanded(false);
@@ -21,16 +22,27 @@ const ProfileCard = ({
     setIsExpanded(true);
     onExpand();
   };
+
+  const paginate = (newDirection) => {
+    setPage([page + newDirection, newDirection]);
+  };
+
   return (
     <AnimateSharedLayout>
       {isExpanded ? (
         <ExpandedProfileCard collapseProfile={collapseProfile} user={user}>
-          <div className="grid grid-cols-5">
-            <div className="col-span-2 z-20">
-              <CardContent user={user} disabled={disabled} />
-            </div>
-            <div className="col-span-3 z-10">
-              <ImageCarousel images={user.pictures} expanded={isExpanded} />
+          <div className="flex w-full">
+            <motion.div className="z-20 p-4 w-1/2" onClick={collapseProfile}>
+              <CardContent user={user} disabled={disabled} expanded={isExpanded} />
+            </motion.div>
+            <div className="z-10 grow w-full">
+              <ImageCarousel
+                images={user.pictures}
+                expanded={isExpanded}
+                paginate={paginate}
+                page={page}
+                direction={direction}
+              />
             </div>
           </div>
         </ExpandedProfileCard>
@@ -41,16 +53,20 @@ const ProfileCard = ({
           expandProfile={expandProfile}
           disabled={disabled}
         >
-          <motion.div
-            className="h-full w-full"
-          >
-            <ImageCarousel images={user.pictures} expanded={isExpanded} />
+          <motion.div className="h-full w-full">
+            <ImageCarousel
+              images={user.pictures}
+              expanded={isExpanded}
+              paginate={paginate}
+              page={page}
+              direction={direction}
+            />
           </motion.div>
           <div className="flex p-4 pb-4 z-30">
-            <CardContent user={user} disabled={disabled} />
+            <CardContent user={user} disabled={disabled} expanded={isExpanded} />
             <div className="flex justify-end items-end grow">
               <motion.div
-                transition={{ delay: 0.45 }}
+                transition={{ delay: 0.2 }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >

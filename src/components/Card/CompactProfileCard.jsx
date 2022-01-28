@@ -89,7 +89,7 @@ const CompactProfileCard = ({
       <motion.div
         layoutId={`expandable-card-${user.id}`}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: 0.2, delayChildren: 0.4 }}
         initial={{ opacity: 0.1 }}
         // onClick={expandProfile}
       >
