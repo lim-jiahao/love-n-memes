@@ -32,7 +32,7 @@ const ProfileDeck = () => {
     // defo better logic can be used here just wanna get it working for now
     try {
       const tempUser = [...users];
-      // const response = await axios.post('/api/swipe/create', { swipeeId: currentUser, swipedRight }, headers);
+      const response = await axios.post('/api/swipe/create', { swipeeId: currentUser, swipedRight }, headers);
       setCurrentUser(tempUser[currentUser].id);
       setMatch(!match);
       setTimeout(() => setMatch(false), 2000);
