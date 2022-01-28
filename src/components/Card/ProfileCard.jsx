@@ -36,10 +36,7 @@ const ProfileCard = ({
       {isExpanded ? (
         <ExpandedProfileCard collapseProfile={collapseProfile} user={user}>
           <div className="flex w-full">
-            <motion.div className=" p-4 w-1/2" onClick={collapseProfile}>
-              <CardContent user={user} disabled={disabled} expanded={isExpanded} />
-            </motion.div>
-            <div className="grow w-full">
+            <div className="grow w-full order-1">
               <ImageCarousel
                 images={user.pictures}
                 expanded={isExpanded}
@@ -48,6 +45,9 @@ const ProfileCard = ({
                 direction={direction}
               />
             </div>
+            <motion.div className=" p-4 w-1/2" onClick={collapseProfile}>
+              <CardContent user={user} disabled={disabled} expanded={isExpanded} />
+            </motion.div>
           </div>
         </ExpandedProfileCard>
       ) : (
@@ -66,7 +66,7 @@ const ProfileCard = ({
               direction={direction}
             />
           </motion.div>
-          <div className="flex p-4 pb-4 absolute">
+          <div className="flex p-4 pb-4 absolute w-full">
             <CardContent user={user} disabled={disabled} expanded={isExpanded} />
             <div className="flex justify-end items-end grow">
               <motion.div

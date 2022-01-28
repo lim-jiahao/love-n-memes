@@ -30,7 +30,7 @@ const ImageCarousel = ({
 
   const backgroundStyle = {
     backgroundImage:
-      'linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), rgba(35, 31, 32, 1)',
+      'linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(25, 22, 21, 0.1),  rgba(25, 22, 21, 0.2), rgba(35, 31, 32, 0.8)',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
   };
@@ -41,7 +41,7 @@ const ImageCarousel = ({
         <motion.div
           className="overflow-hidden bg-slate-900 rounded-r-3xl h-full md:w-full flex justify-center items-center relative"
           layoutId="image-carousel"
-          transition={{ duration: 0.35, delay: 0.15 }}
+          transition={{ }}
         >
           {images.length > 0 && (
             <AnimatePresence initial={false} custom={direction}>
@@ -74,7 +74,7 @@ const ImageCarousel = ({
         <motion.div
           className="overflow-hidden h-full w-full relative"
           layoutId="image-carousel"
-          transition={{ duration: 0.1, delay: 0.15 }}
+          transition={{ duration: 0.2, delay: 0.2 }}
         >
           {images.length > 0 && (
             <AnimatePresence initial={false} custom={direction}>
