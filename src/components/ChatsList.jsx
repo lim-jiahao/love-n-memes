@@ -1,11 +1,15 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import { SwitchHorizontalIcon } from '@heroicons/react/outline';
+import { useNavigate } from 'react-router-dom';
 import ChatMessages from './ChatMessages.jsx';
 
 const ChatsList = () => {
   const [matches, setMatches] = useState([]);
   const [selectedMatch, setSelectedMatch] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!selectedMatch) {
@@ -71,7 +75,15 @@ const ChatsList = () => {
               </div>
             ))}
           </div>
-        ) : <p>No matches yet :(</p>
+        ) : (
+          <div className="flex flex-col items-center">
+            <p className="font-bold mb-2">No matches yet :(</p>
+            <button className="flex items-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full" onClick={() => navigate('/')} type="button">
+              <SwitchHorizontalIcon className="h-5 w-5 mr-1" />
+              <span className="flex-1">Start Swiping</span>
+            </button>
+          </div>
+        )
       )}
       {selectedMatch !== null
       && <ChatMessages match={selectedMatch} setSelectedMatch={setSelectedMatch} />}

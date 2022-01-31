@@ -86,9 +86,9 @@ const ChatMessages = ({ match, setSelectedMatch }) => {
         </div>
       )}
       <form className="w-full flex" onSubmit={handleMsgSend}>
-        <input className="border-solid border-2 border-sky-500 mr-2 flex-1" value={typedMsg} onChange={handleMsgType} />
+        <input className="border-solid border-2 border-sky-500 mr-2 flex-1 p-1" value={typedMsg} onChange={handleMsgType} placeholder="Don't let your memes be dreams" />
         <button type="submit" disabled={sendDisabled}>
-          <PaperAirplaneIcon className={`h-7 w-7 rotate-90 ${sendDisabled ? 'text-gray-300' : 'text-green-500'}`} />
+          <PaperAirplaneIcon className={`h-8 w-8 rotate-90 ${sendDisabled ? 'text-gray-300' : 'text-green-500'}`} />
           {' '}
         </button>
       </form>
