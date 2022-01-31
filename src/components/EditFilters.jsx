@@ -5,6 +5,8 @@ import axios from 'axios';
 const EditFilters = () => {
   const [ageMin, setAgeMin] = useState(18);
   const [ageMax, setAgeMax] = useState(100);
+  const [location, setLocation] = useState('');
+  const [swipeEverywhere, setSwipeEverywhere] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -16,6 +18,8 @@ const EditFilters = () => {
 
         setAgeMin(userInfo.ageMin);
         setAgeMax(userInfo.ageMax);
+        setLocation(userInfo.location);
+        setSwipeEverywhere(userInfo.swipeEverywhere);
       } catch (err) {
         console.error(err.response);
       }
@@ -30,7 +34,7 @@ const EditFilters = () => {
     try {
       const headers = { headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` } };
 
-      const data = { ageMin, ageMax };
+      const data = { ageMin, ageMax, swipeEverywhere };
       const resp = await axios.put('/api/user/filters', data, headers);
       navigate('/profile');
     } catch (err) {
@@ -50,6 +54,18 @@ const EditFilters = () => {
               <input className="w-1/4 p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" type="number" name="age" value={ageMin} min={18} max={ageMax} onChange={(e) => setAgeMin(e.target.value)} required />
               {' - '}
               <input className="w-1/4 p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" type="number" name="age" value={ageMax} min={ageMin} max={100} onChange={(e) => setAgeMax(e.target.value)} required />
+            </label>
+          </div>
+
+          <div>
+            <span className="block text-indigo-500">Swipe In:</span>
+            <label htmlFor="user-location" className="mr-2">
+              <input className="mb-4 mr-1" type="radio" checked={!swipeEverywhere} onChange={() => setSwipeEverywhere(!swipeEverywhere)} />
+              {location}
+            </label>
+            <label htmlFor="everywhere" className="mr-2">
+              <input className="mb-4 mr-1" type="radio" checked={swipeEverywhere} onChange={() => setSwipeEverywhere(!swipeEverywhere)} />
+              Everywhere
             </label>
           </div>
 
