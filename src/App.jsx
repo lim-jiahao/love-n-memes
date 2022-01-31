@@ -10,10 +10,10 @@ import Profile from './components/Profile.jsx';
 import ChatsList from './components/ChatsList.jsx';
 import MemeUpload from './components/MemeUpload.jsx';
 import EditProfile from './components/EditProfile.jsx';
+import EditFilters from './components/EditFilters.jsx';
 
 const App = () => {
   const [auth, setAuth] = useState(false);
-  const [user, setUser] = useState('');
 
   useEffect(() => {
     // currently no authentication on the token is being done (no jwt.verify)
@@ -33,7 +33,6 @@ const App = () => {
         return;
       }
       setAuth(true);
-      setUser(username);
     } catch (e) {
       setAuth(false);
     }
@@ -71,6 +70,10 @@ const App = () => {
           <Route
             path="profile/edit"
             element={auth ? <EditProfile /> : <Login setAuth={setAuth} />}
+          />
+          <Route
+            path="profile/filter"
+            element={auth ? <EditFilters /> : <Login setAuth={setAuth} />}
           />
           <Route
             path="chats"

@@ -132,6 +132,14 @@ export default class UserController extends BaseController {
           [Op.in]: purposeArray,
         },
 
+        // ensure age within user's filter
+        age: {
+          [Op.and]: [
+            { [Op.gte]: user.ageMin },
+            { [Op.lte]: user.ageMax },
+          ],
+        },
+
       },
       include: [
         {
@@ -218,6 +226,23 @@ export default class UserController extends BaseController {
         }
       });
       await Promise.all(promises);
+
+      res.json({ user });
+    } catch (error) { res.status(503).send({ error }); }
+  }
+
+  async updateUserFilters(req, res) {
+    try {
+      if (!req.userId) {
+        res.status(403).send({ message: 'Edit filters unauthorized' }).end();
+        return;
+      }
+      const user = await this.model.findByPk(req.userId);
+
+      await user.update({
+        ageMin: req.body.ageMin,
+        ageMax: req.body.ageMax,
+      });
 
       res.json({ user });
     } catch (error) { res.status(503).send({ error }); }

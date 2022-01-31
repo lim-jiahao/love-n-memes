@@ -10,5 +10,6 @@ router.post('/signup', controller.createUser.bind(controller));
 router.get('/unswiped', controller.getUnswipedUsers.bind(controller));
 router.get('/self', controller.getUser.bind(controller));
 router.put('/self', controller.updateUser.bind(controller));
+router.put('/filters', controller.updateUserFilters.bind(controller));
 
 export default router;
