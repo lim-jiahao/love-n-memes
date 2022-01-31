@@ -66,14 +66,13 @@ const CompactProfileCard = ({
 
   return (
     <motion.div
-      className="absolute right-0 top-20 left-0 ml-auto mr-auto w-72 rounded-3xl"
+      className="absolute right-0 top-20 left-0 ml-auto mr-auto w-72"
       layoutId={`expandable-card-${user.id}`}
-      animate={{ opacity: 1 }}
+      animate={{ opacity: 1, borderRadius: '1.5rem' }}
       transition={{ duration: 0.2, delay: 0.2 }}
-      initial={{ opacity: 0.1 }}
+      initial={{ opacity: 0.1, borderRadius: '1.5rem' }}
     >
       <motion.div
-        // onClick={expandProfile}
         animate={animation}
         dragConstraints={{
           left: 0,
@@ -88,15 +87,14 @@ const CompactProfileCard = ({
         onDragEnd={handleDragEnd}
         drag="x"
         style={{ x }}
-
       >
-        <div
-          className={`bg-sky-900  absolute min-w-full  min-h-full h-96 font-semibold flex flex-col justify-end  text-center rounded-3xl  max-w-xs shadow-lg ${
+        <motion.div
+          className={`bg-sky-900  absolute min-w-full rounded-3xl  min-h-full h-96 font-semibold flex flex-col justify-end  text-center max-w-xs shadow-lg ${
             isGrabbing ? 'cursor-grabbing' : 'cursor-grab'
           }`}
         >
           {children}
-        </div>
+        </motion.div>
       </motion.div>
     </motion.div>
   );

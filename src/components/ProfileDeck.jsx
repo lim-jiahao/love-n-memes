@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 
 import ProfileCard from './Card/ProfileCard.jsx';
+import MatchAnimation from './Card/MatchAnimation.jsx';
 
 const ProfileDeck = () => {
   const [users, setUsers] = useState([]);
@@ -31,8 +32,10 @@ const ProfileDeck = () => {
   const swipe = async (swipedRight) => {
     // defo better logic can be used here just wanna get it working for now
     try {
-      const response = await axios.post('/api/swipe/create', { swipeeId: users[currentUser].id, swipedRight }, headers);
+      // const response = await axios.post('/api/swipe/create', { swipeeId: users[currentUser].id, swipedRight }, headers);
       setCurrentUser(currentUser - 1);
+
+      // if match
       setMatch(!match);
       setTimeout(() => setMatch(false), 2000);
     } catch (err) {
@@ -58,6 +61,8 @@ const ProfileDeck = () => {
             />
           );
         })}
+
+        <MatchAnimation match={match} />
       </div>
     </div>
   );

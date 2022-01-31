@@ -39,28 +39,27 @@ const ImageCarousel = ({
     <>
       {expanded ? (
         <motion.div
-          className="overflow-hidden bg-slate-900 rounded-r-3xl h-full md:w-full flex justify-center items-center relative"
+          className="overflow-hidden bg-white rounded-r-3xl h-full w-full flex justify-center items-center relative"
           layoutId="image-carousel"
-          transition={{ }}
+          transition={{ delay: 0.15, duration: 0.4 }}
         >
-          {images.length > 0 && (
-            <AnimatePresence initial={false} custom={direction}>
-              <motion.img
-                key={page}
-                src={images[imageIndex].filename}
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                className="h-full w-full rounded-3-3xl static"
-                transition={{
-                  x: { type: 'tween' },
-                  opacity: { duration: 0.1 },
-                }}
-              />
-            </AnimatePresence>
-          )}
+
+          <AnimatePresence initial={false} custom={direction}>
+            <motion.img
+              key={page}
+              src={images.length > 0 ? images[imageIndex].filename : 'default.jpg'}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="h-full w-full rounded-r-3xl static"
+              transition={{
+                x: { type: 'tween' },
+                opacity: { duration: 0.1 },
+              }}
+            />
+          </AnimatePresence>
           <div
             className="h-full w-10 absolute right-0 top-0"
             onClick={() => paginate(1)}
@@ -76,28 +75,27 @@ const ImageCarousel = ({
           layoutId="image-carousel"
           transition={{ duration: 0.2, delay: 0.2 }}
         >
-          {images.length > 0 && (
-            <AnimatePresence initial={false} custom={direction}>
-              <motion.img
-                key={page}
-                src={images[imageIndex].filename}
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: 'tween' },
-                  opacity: { duration: 0.1 },
-                }}
-                className="h-full w-full absolute rounded-3xl"
-              />
-              <div
-                className="h-full w-full absolute rounded-3xl"
-                style={backgroundStyle}
-              />
-            </AnimatePresence>
-          )}
+          <AnimatePresence initial={false} custom={direction}>
+            <motion.img
+              key={page}
+              src={images.length > 0 ? images[imageIndex].filename : 'default.jpg'}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: 'tween' },
+                opacity: { duration: 0.1 },
+              }}
+              className="h-full w-full absolute rounded-3xl"
+            />
+            <motion.div
+              id="image-overlay"
+              className="h-full w-full absolute rounded-3xl"
+              style={backgroundStyle}
+            />
+          </AnimatePresence>
           <div
             className="h-full w-10 absolute right-0 top-0"
             onClick={() => paginate(1)}
