@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { Op } from 'sequelize';
+import { rm } from 'fs';
 import BaseController from './BaseController.mjs';
 import getPasswordHash from '../utils/hash.mjs';
 import format from '../utils/format.mjs';
@@ -321,6 +322,9 @@ export default class UserController extends BaseController {
         return;
       }
 
+      rm(`uploads/${req.params.file}`, (err) => {
+        if (err) throw err;
+      });
       await picture.destroy();
       res.json({ status: 'success' });
     } catch (error) {
