@@ -72,7 +72,7 @@ const ChatMessages = ({ match, setSelectedMatch }) => {
         <p className="font-bold text-sm">{match.match.name}</p>
       </div>
       {messages.length > 0 ? (
-        <div className="flex flex-col-reverse min-h-full min-w-full p-1 overflow-auto">
+        <div className="flex flex-col-reverse min-h-full min-w-full p-1 overflow-auto scrollbar">
           {messages.map((message) => (
             <div className={`${isSentByUser(message) ? 'self-end bg-green-200' : 'self-start bg-gray-300'} max-w-[70%] mb-1 py-1 px-2 rounded`}>
               <p className="break-all">{message.body}</p>
