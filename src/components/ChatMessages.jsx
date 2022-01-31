@@ -3,12 +3,14 @@ import io from 'socket.io-client';
 import axios from 'axios';
 import moment from 'moment';
 import { ArrowNarrowLeftIcon, PaperAirplaneIcon } from '@heroicons/react/outline';
+import ConfirmationModal from './ConfirmationModal.jsx';
 
 const ChatMessages = ({ match, setSelectedMatch }) => {
   const [socket, setSocket] = useState();
   const [messages, setMessages] = useState([]);
   const [typedMsg, setTypedMsg] = useState('');
   const [sendDisabled, setSendDisabled] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     let resp;
@@ -69,8 +71,16 @@ const ChatMessages = ({ match, setSelectedMatch }) => {
       <ArrowNarrowLeftIcon className="absolute left-0 top-4 h-6 w-6 hover:bg-gray-300 cursor-pointer" onClick={() => setSelectedMatch(null)} />
       <div className="flex items-center mb-2">
         <img className="w-14 h-14 mr-2 rounded-full border-2 border-black" src={match.match.pictures.length > 0 ? match.match.pictures[0].filename : '/default.jpg'} alt="meme" />
-        <p className="font-bold text-sm">{match.match.name}</p>
+        <p className="font-bold text-base">{match.match.name}</p>
       </div>
+      <button type="button" className="absolute text-sky-700 right-0 top-4 text-base cursor-pointer hover:underline" onClick={() => setIsModalOpen(true)}>Unmatch</button>
+      <ConfirmationModal
+        matchId={match.id}
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        setSelectedMatch={setSelectedMatch}
+      />
+
       {messages.length > 0 ? (
         <div className="flex flex-col-reverse min-h-full min-w-full p-1 overflow-auto scrollbar">
           {messages.map((message) => (
@@ -92,7 +102,6 @@ const ChatMessages = ({ match, setSelectedMatch }) => {
           {' '}
         </button>
       </form>
-
     </div>
   );
 };

@@ -6,5 +6,6 @@ const router = express.Router();
 const controller = new MatchController(db.Match, db);
 
 router.get('/all', controller.getAllMatches.bind(controller));
+router.delete('/:id', controller.delete.bind(controller));
 
 export default router;
