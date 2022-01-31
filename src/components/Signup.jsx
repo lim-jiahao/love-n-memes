@@ -73,106 +73,105 @@ const Signup = ({ setAuth }) => {
   };
 
   return (
-    <div className="flex h-screen">
-      <div className="max-w-md w-full m-auto bg-indigo-100 rounded p-5">
-        <header>
-          <img className="w-20 mx-auto mb-5" src="logo.png" alt="logo" />
-        </header>
+    <div className="max-w-md w-full m-auto bg-indigo-100 rounded p-5">
+      <header className="flex flex-col items-center justify-center">
+        <img className="w-40" src="logo.png" alt="logo" />
+        <p className='font-["Ma_Shan_Zheng"] text-8xl'>Memeus</p>
+      </header>
 
-        <form onSubmit={handleSignup}>
-          <div>
-            <label className="block mb-2 text-indigo-500" htmlFor="name">
-              Name
-              <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="name" value={username} onChange={(e) => setUsername(e.target.value)} required />
+      <form onSubmit={handleSignup}>
+        <div>
+          <label className="block mb-2 text-indigo-500" htmlFor="name">
+            Name
+            <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="name" value={username} onChange={(e) => setUsername(e.target.value)} required />
+          </label>
+        </div>
+
+        <div>
+          <label className="block mb-2 text-indigo-500" htmlFor="email">
+            Email
+            <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </label>
+        </div>
+
+        <div>
+          <label className="block mb-2 text-indigo-500" htmlFor="password">
+            Password
+            <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </label>
+        </div>
+
+        <div>
+          <label className="block mb-2 text-indigo-500" htmlFor="age">
+            Age
+            <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" type="number" name="age" value={age} min={18} onChange={(e) => setAge(e.target.value)} required />
+          </label>
+        </div>
+
+        <div>
+          <label className="block mb-2 text-indigo-500" htmlFor="occupation">
+            Occupation
+            <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="occupation" value={occupation} onChange={(e) => setOccupation(e.target.value)} required />
+          </label>
+        </div>
+
+        <div>
+          <label className="block mb-2 text-indigo-500" htmlFor="location">
+            Location
+            <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="location" value={location} onChange={(e) => setLocation(e.target.value)} required />
+          </label>
+        </div>
+
+        <div>
+          <label className="block mb-2 text-indigo-500" htmlFor="bio">
+            Bio
+            <textarea style={{ resize: 'none' }} className="w-full p-2 mb-2 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="bio" rows={3} value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Say something about yourself!" required />
+          </label>
+        </div>
+
+        <div>
+          <span className="block text-indigo-500">Gender</span>
+          {genders.map((gender, index) => (
+            <label htmlFor={gender} className="mr-2">
+              <input className="mb-4 mr-1" type="radio" value={gender} checked={genders[selectedGender] === gender} onChange={() => setSelectedGender(index)} />
+              {gender}
             </label>
-          </div>
+          ))}
+        </div>
 
-          <div>
-            <label className="block mb-2 text-indigo-500" htmlFor="email">
-              Email
-              <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <div>
+          <span className="block text-indigo-500">Interested In</span>
+          {genders.map((gender, index) => (
+            <label htmlFor={gender} className="mr-2">
+              <input className="mb-4 mr-1" type="checkbox" value={gender} checked={interestsChecked[index]} onChange={() => handleInterestCheck(index)} />
+              {gender}
             </label>
-          </div>
+          ))}
+          <span className="text-red-500 font-bold">{interestMsg}</span>
+        </div>
 
-          <div>
-            <label className="block mb-2 text-indigo-500" htmlFor="password">
-              Password
-              <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <div>
+          <span className="block text-indigo-500">Looking For</span>
+          {purposes.map((purpose, index) => (
+            <label htmlFor={purpose} className="mr-2">
+              <input className="mb-4 mr-1" type="checkbox" value={purpose} checked={purposesChecked[index]} onChange={() => handlePurposeCheck(index)} />
+              {purpose}
             </label>
-          </div>
+          ))}
+          <span className="text-red-500 font-bold">{purposeMsg}</span>
+        </div>
 
-          <div>
-            <label className="block mb-2 text-indigo-500" htmlFor="age">
-              Age
-              <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" type="number" name="age" value={age} min={18} onChange={(e) => setAge(e.target.value)} required />
-            </label>
-          </div>
+        <div>
+          <input className="w-full bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded" type="submit" value="Sign Up" />
+        </div>
+      </form>
 
-          <div>
-            <label className="block mb-2 text-indigo-500" htmlFor="occupation">
-              Occupation
-              <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="occupation" value={occupation} onChange={(e) => setOccupation(e.target.value)} required />
-            </label>
-          </div>
-
-          <div>
-            <label className="block mb-2 text-indigo-500" htmlFor="location">
-              Location
-              <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="location" value={location} onChange={(e) => setLocation(e.target.value)} required />
-            </label>
-          </div>
-
-          <div>
-            <label className="block mb-2 text-indigo-500" htmlFor="bio">
-              Bio
-              <textarea style={{ resize: 'none' }} className="w-full p-2 mb-2 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="bio" rows={3} value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Say something about yourself!" required />
-            </label>
-          </div>
-
-          <div>
-            <span className="block text-indigo-500">Gender</span>
-            {genders.map((gender, index) => (
-              <label htmlFor={gender} className="mr-2">
-                <input className="mb-4 mr-1" type="radio" value={gender} checked={genders[selectedGender] === gender} onChange={() => setSelectedGender(index)} />
-                {gender}
-              </label>
-            ))}
-          </div>
-
-          <div>
-            <span className="block text-indigo-500">Interested In</span>
-            {genders.map((gender, index) => (
-              <label htmlFor={gender} className="mr-2">
-                <input className="mb-4 mr-1" type="checkbox" value={gender} checked={interestsChecked[index]} onChange={() => handleInterestCheck(index)} />
-                {gender}
-              </label>
-            ))}
-            <span className="text-red-500 font-bold">{interestMsg}</span>
-          </div>
-
-          <div>
-            <span className="block text-indigo-500">Looking For</span>
-            {purposes.map((purpose, index) => (
-              <label htmlFor={purpose} className="mr-2">
-                <input className="mb-4 mr-1" type="checkbox" value={purpose} checked={purposesChecked[index]} onChange={() => handlePurposeCheck(index)} />
-                {purpose}
-              </label>
-            ))}
-            <span className="text-red-500 font-bold">{purposeMsg}</span>
-          </div>
-
-          <div>
-            <input className="w-full bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded" type="submit" value="Sign Up" />
-          </div>
-        </form>
-
-        <footer className="text-center">
-          <span className="text-sm">
-            Already have an account?
-            <Link to="/login" className="text-indigo-700 hover:text-pink-700"> Log in!</Link>
-          </span>
-        </footer>
-      </div>
+      <footer className="text-center">
+        <span className="text-sm">
+          Already have an account?
+          <Link to="/login" className="text-indigo-700 hover:text-pink-700"> Log in!</Link>
+        </span>
+      </footer>
     </div>
   );
 };

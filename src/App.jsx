@@ -39,14 +39,14 @@ const App = () => {
   });
 
   return (
-    <div className="max-w-7xl p-20 m-auto">
+    <div className="max-w-7xl p-20 pt-5 m-auto">
       <BrowserRouter>
         {auth && (
           <div className="w-full mb-6">
             <nav className="flex justify-evenly">
-              <NavLink to="/profile" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-user fa-2x`}><i /></NavLink>
-              <NavLink to="/" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-laugh-squint fa-2x`}><i /></NavLink>
-              <NavLink to="/chats" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-comments fa-2x`}><i /></NavLink>
+              <NavLink to="/profile" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-user fa-3x`}><i /></NavLink>
+              <NavLink to="/" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-laugh-squint fa-3x`}><i /></NavLink>
+              <NavLink to="/chats" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-comments fa-3x`}><i /></NavLink>
 
             </nav>
           </div>

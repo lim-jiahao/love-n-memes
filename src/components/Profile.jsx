@@ -30,7 +30,7 @@ const Profile = ({ setAuth }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <img className="w-36 h-36 rounded-full border-4 border-black" src={memes.length > 0 ? memes[0].filename : '/default.jpg'} alt="meme" />
+      <img className="w-40 h-40 rounded-full border-4 border-black" src={memes.length > 0 ? memes[0].filename : '/default.jpg'} alt="meme" />
       <div className="text-black mb-3 text-center">
         <div className="mb-1">
           <h1 className="text-4xl inline-block font-bold tracking-wider">
