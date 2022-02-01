@@ -19,8 +19,14 @@ const Signup = ({ setAuth }) => {
   const [purposeMsg, setPurposeMsg] = useState('');
   const [interestsChecked, setInterestsChecked] = useState(new Array(genders.length).fill(false));
   const [interestMsg, setInterestMsg] = useState('');
+  const [message, setMessage] = useState('');
 
   const navigate = useNavigate();
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    if (message) setMessage('');
+  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -52,10 +58,12 @@ const Signup = ({ setAuth }) => {
       if (token) {
         localStorage.setItem('authToken', token);
         setAuth(true);
+        setMessage('');
         navigate('/');
       }
     } catch (err) {
       setAuth(false);
+      if (err.response.status === 401) setMessage('A user with this email already exists.');
       console.log(err.response);
     }
   };
@@ -90,8 +98,9 @@ const Signup = ({ setAuth }) => {
         <div>
           <label className="block mb-2 text-indigo-500" htmlFor="email">
             Email
-            <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input className="w-full p-2 mb-2 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="email" value={email} onChange={handleEmailChange} required />
           </label>
+          <p className="text-sm text-red-500 font-bold mb-4">{message}</p>
         </div>
 
         <div>
