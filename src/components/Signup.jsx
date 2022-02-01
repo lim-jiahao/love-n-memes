@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import Part1 from './Signup/Part1.jsx';
+import Part2 from './Signup/Part2.jsx';
 
 const Signup = ({ setAuth }) => {
-  // this should prob be queried from db by right but its def not changing so just hard code lol
-  const purposes = ['Love', 'Friendship'];
-  const genders = ['Male', 'Female'];
-
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,18 +13,13 @@ const Signup = ({ setAuth }) => {
   const [occupation, setOccupation] = useState('');
   const [bio, setBio] = useState('');
   const [selectedGender, setSelectedGender] = useState(0); // selected index
-  const [purposesChecked, setPurposesChecked] = useState(new Array(purposes.length).fill(false));
+  const [purposesChecked, setPurposesChecked] = useState(new Array(2).fill(false));
   const [purposeMsg, setPurposeMsg] = useState('');
-  const [interestsChecked, setInterestsChecked] = useState(new Array(genders.length).fill(false));
+  const [interestsChecked, setInterestsChecked] = useState(new Array(2).fill(false));
   const [interestMsg, setInterestMsg] = useState('');
-  const [message, setMessage] = useState('');
+  const [curPart, setCurPart] = useState(1);
 
   const navigate = useNavigate();
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-    if (message) setMessage('');
-  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -58,12 +51,10 @@ const Signup = ({ setAuth }) => {
       if (token) {
         localStorage.setItem('authToken', token);
         setAuth(true);
-        setMessage('');
         navigate('/');
       }
     } catch (err) {
       setAuth(false);
-      if (err.response.status === 401) setMessage('A user with this email already exists.');
       console.log(err.response);
     }
   };
@@ -87,93 +78,43 @@ const Signup = ({ setAuth }) => {
         <p className='font-["Ma_Shan_Zheng"] text-8xl'>Memeus</p>
       </header>
 
-      <form onSubmit={handleSignup}>
-        <div>
-          <label className="block mb-2 text-indigo-500" htmlFor="name">
-            Name
-            <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="name" value={username} onChange={(e) => setUsername(e.target.value)} required />
-          </label>
-        </div>
+      {curPart === 1 && (
+      <Part1
+        username={username}
+        setUsername={setUsername}
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        setCurPart={setCurPart}
+      />
+      )}
 
-        <div>
-          <label className="block mb-2 text-indigo-500" htmlFor="email">
-            Email
-            <input className="w-full p-2 mb-2 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="email" value={email} onChange={handleEmailChange} required />
-          </label>
-          <p className="text-sm text-red-500 font-bold mb-4">{message}</p>
-        </div>
-
-        <div>
-          <label className="block mb-2 text-indigo-500" htmlFor="password">
-            Password
-            <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          </label>
-        </div>
-
-        <div>
-          <label className="block mb-2 text-indigo-500" htmlFor="age">
-            Age
-            <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" type="number" name="age" value={age} min={18} onChange={(e) => setAge(e.target.value)} required />
-          </label>
-        </div>
-
-        <div>
-          <label className="block mb-2 text-indigo-500" htmlFor="occupation">
-            Occupation
-            <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="occupation" value={occupation} onChange={(e) => setOccupation(e.target.value)} required />
-          </label>
-        </div>
-
-        <div>
-          <label className="block mb-2 text-indigo-500" htmlFor="location">
-            Location
-            <input className="w-full p-2 mb-4 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="location" value={location} onChange={(e) => setLocation(e.target.value)} required />
-          </label>
-        </div>
-
-        <div>
-          <label className="block mb-2 text-indigo-500" htmlFor="bio">
-            Bio
-            <textarea style={{ resize: 'none' }} className="w-full p-2 mb-2 text-indigo-700 border-b-2 border-indigo-500 outline-none focus:bg-gray-300" name="bio" rows={3} value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Say something about yourself!" required />
-          </label>
-        </div>
-
-        <div>
-          <span className="block text-indigo-500">Gender</span>
-          {genders.map((gender, index) => (
-            <label htmlFor={gender} className="mr-2">
-              <input className="mb-4 mr-1" type="radio" value={gender} checked={genders[selectedGender] === gender} onChange={() => setSelectedGender(index)} />
-              {gender}
-            </label>
-          ))}
-        </div>
-
-        <div>
-          <span className="block text-indigo-500">Interested In</span>
-          {genders.map((gender, index) => (
-            <label htmlFor={gender} className="mr-2">
-              <input className="mb-4 mr-1" type="checkbox" value={gender} checked={interestsChecked[index]} onChange={() => handleInterestCheck(index)} />
-              {gender}
-            </label>
-          ))}
-          <span className="text-red-500 font-bold">{interestMsg}</span>
-        </div>
-
-        <div>
-          <span className="block text-indigo-500">Looking For</span>
-          {purposes.map((purpose, index) => (
-            <label htmlFor={purpose} className="mr-2">
-              <input className="mb-4 mr-1" type="checkbox" value={purpose} checked={purposesChecked[index]} onChange={() => handlePurposeCheck(index)} />
-              {purpose}
-            </label>
-          ))}
-          <span className="text-red-500 font-bold">{purposeMsg}</span>
-        </div>
-
-        <div>
-          <input className="w-full bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded" type="submit" value="Sign Up" />
-        </div>
-      </form>
+      {curPart === 2 && (
+        <form onSubmit={handleSignup}>
+          <Part2
+            age={age}
+            setAge={setAge}
+            occupation={occupation}
+            setOccupation={setOccupation}
+            location={location}
+            setLocation={setLocation}
+            bio={bio}
+            setBio={setBio}
+            selectedGender={selectedGender}
+            setSelectedGender={setSelectedGender}
+            interestsChecked={interestsChecked}
+            handleInterestCheck={handleInterestCheck}
+            interestMsg={interestMsg}
+            purposesChecked={purposesChecked}
+            handlePurposeCheck={handlePurposeCheck}
+            purposeMsg={purposeMsg}
+          />
+          <div>
+            <input className="w-full bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded" type="submit" value="Sign Up" />
+          </div>
+        </form>
+      )}
 
       <footer className="text-center">
         <span className="text-sm">

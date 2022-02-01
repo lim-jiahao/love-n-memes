@@ -81,6 +81,20 @@ export default class UserController extends BaseController {
     } catch (error) { res.status(503).send({ error }); }
   }
 
+  async checkEmail(req, res) {
+    try {
+      const userCheck = await this.model.findAll({
+        where: {
+          email: req.query.email,
+        },
+      });
+
+      const valid = userCheck.length === 0;
+
+      res.json({ valid });
+    } catch (error) { res.status(503).send({ error }); }
+  }
+
   async getUnswipedUsers(req, res) {
     const { userId } = req;
     const user = await this.model.findOne({
