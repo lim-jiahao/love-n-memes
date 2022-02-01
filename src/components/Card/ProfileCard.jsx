@@ -24,11 +24,7 @@ const ProfileCard = ({
   };
 
   const paginate = (newDirection) => {
-    const totalPictures = user.pictures.length;
-    let currentPictureIndex = Math.abs(page + newDirection);
-    console.log(currentPictureIndex);
-    currentPictureIndex = (currentPictureIndex >= totalPictures) ? 0 : currentPictureIndex;
-    setPage([currentPictureIndex, newDirection]);
+    setPage([page + newDirection, newDirection]);
   };
 
   return (
