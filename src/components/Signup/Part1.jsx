@@ -25,7 +25,12 @@ const Part1 = ({
 
   return (
     <form onSubmit={handleNext}>
-      <ProgressBar step={1} />
+      <p className="text-center font-bold text-sm">
+        We're excited to have you at Memeus!
+        <br />
+        First, set up your account information...
+        <ProgressBar step={1} />
+      </p>
       <div>
         <label className="block mb-2 text-indigo-500" htmlFor="name">
           Name

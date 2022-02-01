@@ -60,6 +60,9 @@ export default class UserController extends BaseController {
         age: req.body.age,
         bio: req.body.bio,
         genderId: req.body.selectedGender + 1,
+        ageMin: req.body.ageMin,
+        ageMax: req.body.ageMax,
+        swipeEverywhere: req.body.swipeEverywhere,
       });
 
       const promises = [];

@@ -1,18 +1,24 @@
 import React from 'react';
+import { ArrowNarrowLeftIcon } from '@heroicons/react/outline';
 import ProgressBar from './ProgessBar.jsx';
 
 const Part2 = ({
   age, setAge, occupation, setOccupation, location, setLocation,
-  bio, setBio, selectedGender, setSelectedGender, interestsChecked,
-  handleInterestCheck, interestMsg, purposesChecked,
-  handlePurposeCheck, purposeMsg,
+  bio, setBio, selectedGender, setSelectedGender, setCurPart,
 }) => {
-  // this should prob be queried from db by right but its def not changing so just hard code lol
-  const purposes = ['Love', 'Friendship'];
   const genders = ['Male', 'Female'];
 
+  const handleNext = async (e) => {
+    e.preventDefault();
+    setCurPart((prev) => prev + 1);
+  };
+
   return (
-    <>
+    <form onSubmit={handleNext}>
+      <div className="relative">
+        <ArrowNarrowLeftIcon className="absolute h-5 w-5 opacity-80 hover:opacity-100 cursor-pointer" onClick={() => setCurPart((cur) => cur - 1)} />
+        <p className="text-center font-bold text-sm">Now some basic info about yourself...</p>
+      </div>
       <ProgressBar step={2} />
       <div>
         <label className="block mb-2 text-indigo-500" htmlFor="age">
@@ -53,27 +59,9 @@ const Part2 = ({
       </div>
 
       <div>
-        <span className="block text-indigo-500">Interested In</span>
-        {genders.map((gender, index) => (
-          <label htmlFor={gender} className="mr-2">
-            <input className="mb-4 mr-1" type="checkbox" value={gender} checked={interestsChecked[index]} onChange={() => handleInterestCheck(index)} />
-            {gender}
-          </label>
-        ))}
-        <span className="text-red-500 font-bold">{interestMsg}</span>
+        <input className="w-full bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded" type="submit" value="Next" />
       </div>
-
-      <div>
-        <span className="block text-indigo-500">Looking For</span>
-        {purposes.map((purpose, index) => (
-          <label htmlFor={purpose} className="mr-2">
-            <input className="mb-4 mr-1" type="checkbox" value={purpose} checked={purposesChecked[index]} onChange={() => handlePurposeCheck(index)} />
-            {purpose}
-          </label>
-        ))}
-        <span className="text-red-500 font-bold">{purposeMsg}</span>
-      </div>
-    </>
+    </form>
   );
 };
 
