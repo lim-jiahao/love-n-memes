@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-
 import { motion, useAnimation } from 'framer-motion';
-
+import { ChatIcon } from '@heroicons/react/outline';
+import { useNavigate } from 'react-router-dom';
 import ProfileCard from './Card/ProfileCard.jsx';
 
 const ProfileDeck = () => {
@@ -10,6 +10,8 @@ const ProfileDeck = () => {
   const [currentUser, setCurrentUser] = useState();
   const [match, setMatch] = useState(false);
   const [expandedProfile, setExpandedProfile] = useState();
+
+  const navigate = useNavigate();
 
   const headers = {
     headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` },
@@ -58,6 +60,17 @@ const ProfileDeck = () => {
             />
           );
         })}
+
+        {currentUser === -1 && (
+        <div className="flex flex-col items-center">
+          <p className="font-bold mb-2">Seems like you've swiped on everyone...</p>
+          <button className="flex items-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full" onClick={() => navigate('/chats')} type="button">
+            <ChatIcon className="h-5 w-5 mr-1" />
+            <span className="flex-1">See Matches</span>
+          </button>
+        </div>
+        )}
+
       </div>
     </div>
   );
