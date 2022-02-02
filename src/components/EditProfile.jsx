@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const EditProfile = ({ setAuth }) => {
+const EditProfile = () => {
   // this should prob be queried from db by right but its def not changing so just hard code lol
   const purposes = ['Love', 'Friendship'];
   const genders = ['Male', 'Female'];

@@ -52,4 +52,22 @@ export default class MatchController extends BaseController {
       res.status(503).send({ err });
     }
   }
+
+  async delete(req, res) {
+    try {
+      if (!req.userId) {
+        res.status(403).send({ message: 'Remove match unauthorized' }).end();
+        return;
+      }
+
+      const match = await this.model.findByPk(req.params.id);
+      await this.db.Message.destroy({
+        where: { matchId: match.id },
+      });
+      await match.destroy();
+      res.json({ status: 'success' });
+    } catch (error) {
+      res.status(503).send({ error });
+    }
+  }
 }

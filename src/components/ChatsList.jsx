@@ -1,11 +1,15 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
+import { SwitchHorizontalIcon } from '@heroicons/react/outline';
+import { useNavigate } from 'react-router-dom';
 import ChatMessages from './ChatMessages.jsx';
 
 const ChatsList = () => {
   const [matches, setMatches] = useState([]);
   const [selectedMatch, setSelectedMatch] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!selectedMatch) {
@@ -58,7 +62,7 @@ const ChatsList = () => {
         matches.length > 0 ? (
           <div className="flex flex-col items-center">
             {matches.map((match) => (
-              <div role="button" tabIndex={0} className="flex items-center w-1/2 mb-2 border-b-2 p-2 opacity-60 hover:opacity-100" onClick={() => handleUserClick(match)} onKeyDown={(e) => handleKeyPress(e, match)}>
+              <div role="button" tabIndex={0} className="flex items-center w-1/2 mb-2 border-b-2 p-2 opacity-70 hover:opacity-100" onClick={() => handleUserClick(match)} onKeyDown={(e) => handleKeyPress(e, match)}>
                 <img className="w-14 h-14 mr-2 rounded-full border-2 border-black" src={match.match.pictures.length > 0 ? match.match.pictures[0].filename : '/default.jpg'} alt="meme" />
                 <div className="flex-1">
                   <p className="font-bold text-sm">{match.match.name}</p>
@@ -71,7 +75,15 @@ const ChatsList = () => {
               </div>
             ))}
           </div>
-        ) : <p>No matches yet :(</p>
+        ) : (
+          <div className="flex flex-col items-center">
+            <p className="font-bold mb-2">No matches yet :(</p>
+            <button className="flex items-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full" onClick={() => navigate('/')} type="button">
+              <SwitchHorizontalIcon className="h-5 w-5 mr-1" />
+              <span className="flex-1">Start Swiping</span>
+            </button>
+          </div>
+        )
       )}
       {selectedMatch !== null
       && <ChatMessages match={selectedMatch} setSelectedMatch={setSelectedMatch} />}

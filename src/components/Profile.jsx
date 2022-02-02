@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import {
-  LocationMarkerIcon, BriefcaseIcon, PhotographIcon, PencilAltIcon,
+  LocationMarkerIcon, BriefcaseIcon, PhotographIcon, PencilAltIcon, FilterIcon,
 } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
 import Logout from './Logout.jsx';
@@ -30,7 +30,7 @@ const Profile = ({ setAuth }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <img className="w-36 h-36 rounded-full border-4 border-black" src={memes.length > 0 ? memes[0].filename : '/default.jpg'} alt="meme" />
+      <img className="w-40 h-40 rounded-full border-4 border-black" src={memes.length > 0 ? memes[0].filename : '/default.jpg'} alt="meme" />
       <div className="text-black mb-3 text-center">
         <div className="mb-1">
           <h1 className="text-4xl inline-block font-bold tracking-wider">
@@ -48,13 +48,17 @@ const Profile = ({ setAuth }) => {
         </div>
       </div>
 
-      <button className="flex items-center justify-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded-full" onClick={() => navigate('/profile/upload')} type="button">
+      <button className="flex items-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded-full" onClick={() => navigate('/profile/upload')} type="button">
         <PhotographIcon className="h-5 w-5 mr-1" />
-        Upload Memes
+        <span className="flex-1">Upload Memes</span>
       </button>
-      <button className="flex items-center justify-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded-full" onClick={() => navigate('/profile/edit')} type="button">
+      <button className="flex items-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded-full" onClick={() => navigate('/profile/edit')} type="button">
         <PencilAltIcon className="h-5 w-5 mr-1" />
-        Edit Info
+        <span className="flex-1">Edit Info</span>
+      </button>
+      <button className="flex items-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-4 rounded-full" onClick={() => navigate('/profile/filter')} type="button">
+        <FilterIcon className="h-5 w-5 mr-1" />
+        <span className="flex-1">Edit Filters</span>
       </button>
       <Logout setAuth={setAuth} />
 

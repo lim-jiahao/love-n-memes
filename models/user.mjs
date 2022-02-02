@@ -41,6 +41,21 @@ export default function initUserModel(sequelize, DataTypes) {
         key: 'id',
       },
     },
+    ageMin: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      defaultValue: 18,
+    },
+    ageMax: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+      defaultValue: 100,
+    },
+    swipeEverywhere: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     createdAt: {
       allowNull: false,
       type: DataTypes.DATE,
