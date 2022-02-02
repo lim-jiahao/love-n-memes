@@ -12,7 +12,7 @@ const ExpandedProfileCard = ({ collapseProfile, user, children }) =>
       layoutId={`expandable-card-${user.id}`}
       transition={{ delay: 0.15, duration: 0.4 }}
       animate={{ opacity: 1 }}
-      className="absolute right-0 top-20 left-0 ml-auto mr-auto lg:w-3/4 md:w-full lg:mx-auto  "
+      className="absolute right-0 top-20 left-0 ml-auto mr-auto w-80 lg:w-3/4 md:w-full lg:mx-auto  "
     >
       <motion.div
         className="bg-sky-500 absolute min-w-full rounded-3xl  min-h-full h-96 font-semibold flex flex-col justify-start  text-center  max-w-xs shadow-lg"
@@ -20,7 +20,7 @@ const ExpandedProfileCard = ({ collapseProfile, user, children }) =>
         transition={{ duration: 0.2 }}
       >
         <motion.div
-          className="flex h-full w-full"
+          className="md:flex h-full w-full"
         >
           {children}
         </motion.div>

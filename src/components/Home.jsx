@@ -1,7 +1,8 @@
 import React from 'react';
-import MatchArea from './MatchArea.jsx';
+import ProfileDeck from './ProfileDeck.jsx';
 
 const Home = () => (
-  <MatchArea />
+  <ProfileDeck />
+
 );
 export default Home;

@@ -13,7 +13,6 @@ const CompactProfileCard = ({
   disabled,
   children,
 }) => {
-  console.log(user, 'user');
   const [isGrabbing, setIsGrabbing] = useState(false);
   const [dragDirection, setDragDirection] = useState();
 

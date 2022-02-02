@@ -39,7 +39,7 @@ const App = () => {
   });
 
   return (
-    <div className="max-w-7xl p-20 pt-5 m-auto">
+    <div className="w-screen md:max-w-7xl pt-8 p-4 lg:p-0   m-auto">
       <BrowserRouter>
         {auth && (
           <div className="w-full mb-6">

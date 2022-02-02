@@ -39,7 +39,7 @@ const ImageCarousel = ({
     <>
       {expanded ? (
         <motion.div
-          className="overflow-hidden bg-black rounded-r-3xl h-full w-full flex justify-center items-center relative"
+          className="overflow-hidden bg-black rounded-r-3xl h-full w-full flex justify-center items-center relative "
           layoutId="image-carousel"
           transition={{ delay: 0.15, duration: 0.4 }}
         >
