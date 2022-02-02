@@ -1,28 +1,28 @@
 import React, { useEffect } from 'react';
 import {
-  motion, AnimatePresence, useTransform, useMotionValue,
+  motion, AnimatePresence,
 } from 'framer-motion';
 
 const MatchAnimation = ({ handleClick, match }) => {
-  const x = useMotionValue();
-
-  const enterAnimation = {
-    opacity: 1,
-    scale: 1,
-    borderRadius: '5px',
-    rotate: 360,
-    transition: {
-      duration: 1,
+  const pepeVariants = {
+    enter: {
+      opacity: 1,
+      scale: 1,
+      x: 0,
+      transition: {
+        duration: 0.5,
+      },
     },
-  };
-
-  const exitAnimation = {
-    opacity: 0,
-    rotate: 360,
-  };
-
-  const hoverAnimation = {
-    borderRadius: '50%',
+    rest: {
+      x: -1000,
+      y: -200,
+    },
+    exit: {
+      x: -1000,
+      transition: {
+        duration: 0.5,
+      },
+    },
   };
 
   return (
@@ -31,15 +31,17 @@ const MatchAnimation = ({ handleClick, match }) => {
         <motion.div
           key="match-modal"
           className="w-96 rounded text-center top-40  absolute right-0 left-0 mr-auto ml-auto text-9xl"
-          animate={enterAnimation}
-          whileHover={hoverAnimation}
-          exit={exitAnimation}
-          transition={{
-            duration: 0.75,
-          }}
-          initial={{ opacity: 1, scale: 0.1, borderRadius: '50%' }}
         >
-          😂
+          <motion.img
+            src="pepe-laugh.gif"
+            alt="pepe laugh"
+            className="rounded-3xl h-60 w-60"
+            animate="enter"
+            exit="exit"
+            initial="rest"
+            variants={pepeVariants}
+          />
+
         </motion.div>
       )}
     </AnimatePresence>
