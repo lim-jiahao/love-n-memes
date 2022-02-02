@@ -3,8 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { wrap } from 'popmotion';
 
 const variants = {
-  enter: (direction) => ({
-    x: direction > 0 ? 2000 : -2000,
+  enter: () => ({
     opacity: 0,
   }),
   center: {
@@ -12,15 +11,14 @@ const variants = {
     zIndex: 0,
     opacity: 1,
   },
-  exit: (direction) => ({
-    x: direction < 0 ? 2000 : -2000,
+  exit: () => ({
     zIndex: 0,
     opacity: 0,
   }),
 };
 
 const ImageCarousel = ({
-  images, expanded, paginate, page, direction,
+  images, expanded, paginate, page,
 }) => {
   // We only have 3 images, but we paginate them absolutely (ie 1, 2, 3, 4, 5...) and
   // then wrap that within 0-2 to find our image ID in the array below. By passing an
@@ -35,38 +33,49 @@ const ImageCarousel = ({
     backgroundSize: 'cover',
   };
 
+  // this component could use some refactoring, many of the styles are similar other than
+  // some position: absolutes here and there.
   return (
     <>
       {expanded ? (
         <motion.div
-          className="overflow-hidden bg-slate-900 rounded-r-3xl h-full md:w-full flex justify-center items-center relative"
+          className="overflow-hidden bg-black rounded-r-3xl h-full w-full flex justify-center items-center relative "
           layoutId="image-carousel"
-          transition={{ }}
+          transition={{ delay: 0.15, duration: 0.4 }}
         >
-          {images.length > 0 && (
-            <AnimatePresence initial={false} custom={direction}>
-              <motion.img
-                key={page}
-                src={images[imageIndex].filename}
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                className="h-full w-full rounded-3-3xl static"
-                transition={{
-                  x: { type: 'tween' },
-                  opacity: { duration: 0.1 },
-                }}
-              />
-            </AnimatePresence>
-          )}
+
+          <AnimatePresence initial={false}>
+            <motion.img
+              key={page}
+              src={images.length > 0 ? images[imageIndex].filename : 'default.jpg'}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="h-full w-full rounded-r-3xl absolute"
+              transition={{
+                opacity: { duration: 0.1 },
+              }}
+            />
+          </AnimatePresence>
+          <div className="absolute w-full flex mt-2 px-4 py-1 top-0">
+            {images.map((_, index) => {
+              const width = 100 / images.length;
+
+              const divStyle = 'h-1 mx-2 rounded-3xl ';
+              const selected = 'bg-white';
+              const unselected = 'opacity-50 bg-slate-900';
+              return (
+                <div className={`${divStyle} ${index === imageIndex ? selected : unselected}`} style={{ width: `${width}%` }} />
+              );
+            })}
+          </div>
           <div
-            className="h-full w-10 absolute right-0 top-0"
+            className="h-full w-10 absolute right-0 top-0   opacity-50 hover:bg-gradient-to-r hover:from-transparent hover:to-black"
             onClick={() => paginate(1)}
           />
           <div
-            className="h-full w-10  absolute left-0 top-0"
+            className="h-full w-10  absolute left-0 top-0 opacity-50   hover:bg-gradient-to-l hover:from-transparent hover:to-black"
             onClick={() => paginate(-1)}
           />
         </motion.div>
@@ -76,34 +85,45 @@ const ImageCarousel = ({
           layoutId="image-carousel"
           transition={{ duration: 0.2, delay: 0.2 }}
         >
-          {images.length > 0 && (
-            <AnimatePresence initial={false} custom={direction}>
-              <motion.img
-                key={page}
-                src={images[imageIndex].filename}
-                custom={direction}
-                variants={variants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: 'tween' },
-                  opacity: { duration: 0.1 },
-                }}
-                className="h-full w-full absolute rounded-3xl"
-              />
-              <div
-                className="h-full w-full absolute rounded-3xl"
-                style={backgroundStyle}
-              />
-            </AnimatePresence>
-          )}
+          <AnimatePresence initial={false}>
+            <motion.img
+              key={page}
+              src={images.length > 0 ? images[imageIndex].filename : 'default.jpg'}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                opacity: { duration: 0.1 },
+              }}
+              className="h-full w-full absolute rounded-3xl"
+            />
+            <motion.div
+              id="image-overlay"
+              className="h-full w-full absolute rounded-3xl"
+              style={backgroundStyle}
+            />
+          </AnimatePresence>
+
+          <div className="absolute w-full flex mt-2 px-4 py-1">
+            {images.map((_, index) => {
+              const width = 100 / images.length;
+
+              const divStyle = 'h-1 mx-2 rounded-3xl ';
+              const selected = 'bg-white';
+              const unselected = 'opacity-50 bg-slate-900';
+              return (
+                <div className={`${divStyle} ${index === imageIndex ? selected : unselected}`} style={{ width: `${width}%` }} />
+              );
+            })}
+          </div>
+
           <div
-            className="h-full w-10 absolute right-0 top-0"
+            className="h-full w-10 absolute right-0 top-0  rounded-r-3xl opacity-50 hover:bg-gradient-to-r hover:from-transparent hover:to-black"
             onClick={() => paginate(1)}
           />
           <div
-            className="h-full w-10  absolute left-0 top-0"
+            className="h-full w-10  absolute left-0 top-0 rounded-l-3xl opacity-50  hover:bg-gradient-to-l hover:from-transparent hover:to-black"
             onClick={() => paginate(-1)}
           />
         </motion.div>

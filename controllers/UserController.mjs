@@ -134,7 +134,6 @@ export default class UserController extends BaseController {
       // if user not swiping everywhere, then filter on users in same location
     } : { location: user.location };
 
-    console.log(user);
     // queries for all users except the user themselve and all the past users they have swiped on
     const rows = await this.model.findAll({
       where: {
