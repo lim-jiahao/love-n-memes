@@ -134,7 +134,6 @@ export default class UserController extends BaseController {
       // if user not swiping everywhere, then filter on users in same location
     } : { location: user.location };
 
-    console.log(user);
     // queries for all users except the user themselve and all the past users they have swiped on
     const rows = await this.model.findAll({
       where: {
@@ -166,17 +165,17 @@ export default class UserController extends BaseController {
         },
 
         // ensure age within user's filter (two way)
-        age: {
-          [Op.and]: [
-            { [Op.gte]: user.ageMin },
-            { [Op.lte]: user.ageMax },
-          ],
-        },
+        // age: {
+        //   [Op.and]: [
+        //     { [Op.gte]: user.ageMin },
+        //     { [Op.lte]: user.ageMax },
+        //   ],
+        // },
 
-        [Op.and]: [
-          { ageMin: { [Op.lte]: user.age } },
-          { ageMax: { [Op.gte]: user.age } },
-        ],
+        // [Op.and]: [
+        //   { ageMin: { [Op.lte]: user.age } },
+        //   { ageMax: { [Op.gte]: user.age } },
+        // ],
 
         // use previously defined location clause to filter on location preferences
         ...locationClause,
