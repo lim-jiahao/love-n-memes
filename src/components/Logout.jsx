@@ -12,9 +12,9 @@ const Logout = ({ setAuth }) => {
   };
 
   return (
-    <button className="flex items-center justify-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full" type="button" onClick={handleLogout}>
+    <button className="flex items-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full" type="button" onClick={handleLogout}>
       <LogoutIcon className="h-5 w-5 mr-1" />
-      Log Out
+      <span className="flex-1">Log Out</span>
     </button>
   );
 };

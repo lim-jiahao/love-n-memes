@@ -10,10 +10,10 @@ import Profile from './components/Profile.jsx';
 import ChatsList from './components/ChatsList.jsx';
 import MemeUpload from './components/MemeUpload.jsx';
 import EditProfile from './components/EditProfile.jsx';
+import EditFilters from './components/EditFilters.jsx';
 
 const App = () => {
   const [auth, setAuth] = useState(false);
-  const [user, setUser] = useState('');
 
   useEffect(() => {
     // currently no authentication on the token is being done (no jwt.verify)
@@ -33,21 +33,20 @@ const App = () => {
         return;
       }
       setAuth(true);
-      setUser(username);
     } catch (e) {
       setAuth(false);
     }
   });
 
   return (
-    <div className="max-w-7xl p-20 m-auto">
+    <div className="max-w-7xl p-20 pt-5 m-auto">
       <BrowserRouter>
         {auth && (
           <div className="w-full mb-6">
             <nav className="flex justify-evenly">
-              <NavLink to="/profile" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-user fa-2x`}><i /></NavLink>
-              <NavLink to="/" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-laugh-squint fa-2x`}><i /></NavLink>
-              <NavLink to="/chats" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-comments fa-2x`}><i /></NavLink>
+              <NavLink to="/profile" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-user fa-3x`}><i /></NavLink>
+              <NavLink to="/" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-laugh-squint fa-3x`}><i /></NavLink>
+              <NavLink to="/chats" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-comments fa-3x`}><i /></NavLink>
 
             </nav>
           </div>
@@ -71,6 +70,10 @@ const App = () => {
           <Route
             path="profile/edit"
             element={auth ? <EditProfile /> : <Login setAuth={setAuth} />}
+          />
+          <Route
+            path="profile/filter"
+            element={auth ? <EditFilters /> : <Login setAuth={setAuth} />}
           />
           <Route
             path="chats"

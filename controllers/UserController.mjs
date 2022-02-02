@@ -1,8 +1,10 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { Op } from 'sequelize';
+import { rm } from 'fs';
 import BaseController from './BaseController.mjs';
 import getPasswordHash from '../utils/hash.mjs';
+import format from '../utils/format.mjs';
 
 dotenv.config();
 const { SALT } = process.env;
@@ -53,11 +55,14 @@ export default class UserController extends BaseController {
         name: req.body.name,
         email: req.body.email,
         password: hashedPassword,
-        location: req.body.location,
+        location: format(req.body.location),
         occupation: req.body.occupation,
         age: req.body.age,
         bio: req.body.bio,
         genderId: req.body.selectedGender + 1,
+        ageMin: req.body.ageMin,
+        ageMax: req.body.ageMax,
+        swipeEverywhere: req.body.swipeEverywhere,
       });
 
       const promises = [];
@@ -76,6 +81,20 @@ export default class UserController extends BaseController {
       const payload = { id: user.id, username: user.name, email: user.email };
       const token = jwt.sign(payload, SALT, { expiresIn: '1 day' });
       res.json({ token });
+    } catch (error) { res.status(503).send({ error }); }
+  }
+
+  async checkEmail(req, res) {
+    try {
+      const userCheck = await this.model.findAll({
+        where: {
+          email: req.query.email,
+        },
+      });
+
+      const valid = userCheck.length === 0;
+
+      res.json({ valid });
     } catch (error) { res.status(503).send({ error }); }
   }
 
@@ -100,6 +119,20 @@ export default class UserController extends BaseController {
     const purposeArray = user.purposes.map((purpose) => purpose.id);
     const swipes = await this.db.Swipe.findAll({ where: { swiperId: user.id } });
     const swipedUsersArray = swipes.map((swipe) => swipe.swipeeId);
+    const locationClause = user.swipeEverywhere ? {
+      // if user is swiping everywhere, then filter on users that are either
+      // 1. not swiping everywhere but in same location or 2. swiping everywhere
+      [Op.or]: [
+        {
+          [Op.and]: [
+            { swipeEverywhere: false },
+            { location: user.location },
+          ],
+        },
+        { swipeEverywhere: true },
+      ],
+      // if user not swiping everywhere, then filter on users in same location
+    } : { location: user.location };
 
     console.log(user);
     // queries for all users except the user themselve and all the past users they have swiped on
@@ -131,6 +164,22 @@ export default class UserController extends BaseController {
         '$purposes.id$': {
           [Op.in]: purposeArray,
         },
+
+        // ensure age within user's filter (two way)
+        age: {
+          [Op.and]: [
+            { [Op.gte]: user.ageMin },
+            { [Op.lte]: user.ageMax },
+          ],
+        },
+
+        [Op.and]: [
+          { ageMin: { [Op.lte]: user.age } },
+          { ageMax: { [Op.gte]: user.age } },
+        ],
+
+        // use previously defined location clause to filter on location preferences
+        ...locationClause,
 
       },
       include: [
@@ -196,7 +245,7 @@ export default class UserController extends BaseController {
 
       await user.update({
         name: req.body.name,
-        location: req.body.location,
+        location: format(req.body.location),
         occupation: req.body.occupation,
         age: req.body.age,
         bio: req.body.bio,
@@ -218,6 +267,24 @@ export default class UserController extends BaseController {
         }
       });
       await Promise.all(promises);
+
+      res.json({ user });
+    } catch (error) { res.status(503).send({ error }); }
+  }
+
+  async updateUserFilters(req, res) {
+    try {
+      if (!req.userId) {
+        res.status(403).send({ message: 'Edit filters unauthorized' }).end();
+        return;
+      }
+      const user = await this.model.findByPk(req.userId);
+
+      await user.update({
+        ageMin: req.body.ageMin,
+        ageMax: req.body.ageMax,
+        swipeEverywhere: req.body.swipeEverywhere,
+      });
 
       res.json({ user });
     } catch (error) { res.status(503).send({ error }); }
@@ -272,6 +339,9 @@ export default class UserController extends BaseController {
         return;
       }
 
+      rm(`uploads/${req.params.file}`, (err) => {
+        if (err) throw err;
+      });
       await picture.destroy();
       res.json({ status: 'success' });
     } catch (error) {
