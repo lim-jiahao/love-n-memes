@@ -29,7 +29,7 @@ const MemeUpload = () => {
     }
   };
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center pt-28">
 
       {memes.length > 0
         ? (

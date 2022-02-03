@@ -39,17 +39,18 @@ const App = () => {
   });
 
   return (
-    <div className="w-screen md:max-w-7xl pt-8 p-4 lg:p-0   m-auto">
+    <div className="w-screen md:max-w-7xl pt-8 p-4  m-auto">
+
       <BrowserRouter>
         {auth && (
-          <div className="w-full mb-6">
-            <nav className="flex justify-evenly">
-              <NavLink to="/profile" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-user fa-3x`}><i /></NavLink>
-              <NavLink to="/" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-laugh-squint fa-3x`}><i /></NavLink>
-              <NavLink to="/chats" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-comments fa-3x`}><i /></NavLink>
+        <div className="w-full mb-6">
+          <nav className="flex justify-evenly">
+            <NavLink to="/profile" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-user fa-3x`}><i /></NavLink>
+            <NavLink to="/" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-laugh-squint fa-3x`}><i /></NavLink>
+            <NavLink to="/chats" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-comments fa-3x`}><i /></NavLink>
 
-            </nav>
-          </div>
+          </nav>
+        </div>
         )}
 
         <Routes>
@@ -83,6 +84,7 @@ const App = () => {
 
         {/* {auth && <Home />} */}
       </BrowserRouter>
+
     </div>
   );
 };

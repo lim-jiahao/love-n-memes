@@ -54,7 +54,7 @@ export default function initUserModel(sequelize, DataTypes) {
     swipeEverywhere: {
       allowNull: false,
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      defaultValue: true,
     },
     createdAt: {
       allowNull: false,

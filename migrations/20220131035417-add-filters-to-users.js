@@ -15,7 +15,7 @@ module.exports = {
     await queryInterface.addColumn('users', 'swipe_everywhere', {
       allowNull: false,
       type: Sequelize.BOOLEAN,
-      defaultValue: false,
+      defaultValue: true,
     });
   },
 

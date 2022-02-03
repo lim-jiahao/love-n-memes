@@ -42,7 +42,7 @@ export default class SwipeController extends BaseController {
             matcherId: req.userId,
             matcheeId: swipeeId,
           });
-          res.status(201).send({ message: 'a match has been made!' });
+          res.status(201).send({ message: 'a match has been made!', match: true });
         }
       } else if (created) res.status(201).send({ message: 'successfully created swipe' });
       else res.status(400).send({ message: "you've already swiped this user" });

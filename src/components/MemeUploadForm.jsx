@@ -94,14 +94,17 @@ const MemeUploadForm = ({ memes, setMemes }) => {
                     <input id="file-upload" name="file-upload" type="file" className="sr-only" ref={fileInputRef} onChange={handleFileChange} />
                   </label>
                 </div>
-                <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                <p className="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
               </>
             ) }
 
           </div>
         </div>
-        <button className="w-36 mx-auto bg-indigo-700 hover:bg-pink-700 disabled:opacity-50 mt-4 text-white font-bold py-2 px-4 rounded-full" type="submit" value="Upload" disabled={disableSubmit}>Upload</button>
-        <p className="text-red-500 font-bold">{errMsg}</p>
+        <div className="w-full text-center">
+
+          <button className="w-36 mx-auto bg-indigo-700 hover:bg-pink-700 disabled:opacity-50 mt-4 text-white font-bold py-2 px-4 rounded-full" type="submit" value="Upload" disabled={disableSubmit}>Upload</button>
+          <p className="text-red-500 font-bold">{errMsg}</p>
+        </div>
       </div>
     </form>
   );
