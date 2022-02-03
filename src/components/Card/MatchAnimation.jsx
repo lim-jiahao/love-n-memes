@@ -55,12 +55,12 @@ const confettiOptions = {
 
 const MatchAnimation = ({ match, user, setMatch }) => {
   const navigate = useNavigate();
-
+  console.log(user, 'match animation user');
   const randomPepe = pepeImages[Math.floor(Math.random() * pepeImages.length)];
 
   return (
     <AnimatePresence>
-      {match && (
+      {match && user && (
       <div
         key="match-modal"
         className="absolute rounded left-0 right-0 mx-auto w-96 top-20"
@@ -86,7 +86,7 @@ const MatchAnimation = ({ match, user, setMatch }) => {
             initial="rest"
             variants={textVariants}
           >
-            <div className=" bg-white rounded-r-3xl px-4 pt-5 pb-4 text-left  shadow-xl sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6 h-80 w-80 relative flex flex-col text-center">
+            <div className=" bg-white rounded-r-3xl px-4 pt-5 pb-4 shadow-xl sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6 h-80 w-80 relative flex flex-col text-center">
               <div className="sm:block absolute top-0 right-0 pt-4 pr-4">
                 <button
                   type="button"
@@ -109,6 +109,7 @@ const MatchAnimation = ({ match, user, setMatch }) => {
                 Send
                 {' '}
                 {user.name}
+                {' '}
                 some of your best of dank memes
               </p>
               <div className="self-end justify-self-end mt-8">

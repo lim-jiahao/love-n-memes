@@ -1,9 +1,7 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
 import { ChatIcon } from '@heroicons/react/outline';
 import { useNavigate } from 'react-router-dom';
-import { user } from 'pg/lib/defaults';
 import ProfileCard from './Card/ProfileCard.jsx';
 import MatchAnimation from './Card/MatchAnimation.jsx';
 
@@ -37,16 +35,16 @@ const ProfileDeck = () => {
     try {
       const response = await axios.post('/api/swipe/create', { swipeeId: users[currentUser].id, swipedRight }, headers);
       setCurrentUser(currentUser - 1);
-      console.log(response);
       // if match
-      setMatch(!match);
-      setTimeout(() => setMatch(false), 8000);
+      if (response.data.match) {
+        setMatch(!match);
+        setTimeout(() => setMatch(false), 8000);
+      }
     } catch (err) {
       console.log(err.response);
     }
   };
 
-  console.log(users, currentUser);
   return (
     <div className="w-full ">
       <div
@@ -65,17 +63,16 @@ const ProfileDeck = () => {
             />
           );
         })}
-
-        {currentUser === -1 ? (
-          <div className="flex flex-col items-center">
-            <p className="font-bold mb-2">Seems like you've swiped on everyone...</p>
-            <button className="flex items-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full" onClick={() => navigate('/chats')} type="button">
-              <ChatIcon className="h-5 w-5 mr-1" />
-              <span className="flex-1">See Matches</span>
-            </button>
-          </div>
-        )
-          : (<MatchAnimation match={match} user={users[currentUser]} setMatch={setMatch} />)}
+        <MatchAnimation match={match} user={users[currentUser + 1]} setMatch={setMatch} />
+        {currentUser === -1 && (
+        <div className="flex flex-col items-center">
+          <p className="font-bold mb-2">Seems like you've swiped on everyone...</p>
+          <button className="flex items-center w-48 bg-indigo-700 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full" onClick={() => navigate('/chats')} type="button">
+            <ChatIcon className="h-5 w-5 mr-1" />
+            <span className="flex-1">See Matches</span>
+          </button>
+        </div>
+        )}
 
       </div>
     </div>

@@ -33,11 +33,33 @@ const CardContent = ({ user, disabled, expanded }) => (
         <p className="font-light text-sm">{user.location}</p>
       </div>
       {expanded && (
-      <motion.div className="flex mb-1">
-        <PencilIcon className="h-4 w-4 mr-2" />
-        <p className="font-light text-sm">{user.bio}</p>
-      </motion.div>
+        <>
+          <motion.div className="flex mb-1">
+            <PencilIcon className="h-4 w-4 mr-2" />
+            <p className="font-light text-sm">{user.bio}</p>
+          </motion.div>
 
+          <div className="mb-2 mt-4">
+            <div className="mr-2">
+              Looking for:
+            </div>
+            {user.purposes.map((el) => (
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                { el.name }
+              </span>
+            ))}
+          </div>
+          <div className="mb-2">
+            <div className="mr-2">
+              Interested in:
+            </div>
+            {user.interests.map((el) => (
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                { el.name }
+              </span>
+            ))}
+          </div>
+        </>
       )}
     </div>
   </motion.div>
