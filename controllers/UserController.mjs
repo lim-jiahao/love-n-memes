@@ -145,6 +145,22 @@ export default class UserController extends BaseController {
           ],
         },
 
+        // ensure age within user's filter (two way)
+        age: {
+          [Op.and]: [
+            { [Op.gte]: user.ageMin },
+            { [Op.lte]: user.ageMax },
+          ],
+        },
+
+        [Op.and]: [
+          { ageMin: { [Op.lte]: user.age } },
+          { ageMax: { [Op.gte]: user.age } },
+        ],
+
+        // use previously defined location clause to filter on location preferences
+        ...locationClause,
+
         // ensure mutual interest between the users
         [Op.and]: [
           {
@@ -163,23 +179,6 @@ export default class UserController extends BaseController {
         '$purposes.id$': {
           [Op.in]: purposeArray,
         },
-
-        // ensure age within user's filter (two way)
-        // age: {
-        //   [Op.and]: [
-        //     { [Op.gte]: user.ageMin },
-        //     { [Op.lte]: user.ageMax },
-        //   ],
-        // },
-
-        // [Op.and]: [
-        //   { ageMin: { [Op.lte]: user.age } },
-        //   { ageMax: { [Op.gte]: user.age } },
-        // ],
-
-        // use previously defined location clause to filter on location preferences
-        ...locationClause,
-
       },
       include: [
         {
