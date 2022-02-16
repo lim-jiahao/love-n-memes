@@ -8,10 +8,12 @@ import Login from './components/Login.jsx';
 import Signup from './components/Signup.jsx';
 import Profile from './components/Profile.jsx';
 import ChatsList from './components/ChatsList.jsx';
+import MemeUpload from './components/MemeUpload.jsx';
+import EditProfile from './components/EditProfile.jsx';
+import EditFilters from './components/EditFilters.jsx';
 
 const App = () => {
   const [auth, setAuth] = useState(false);
-  const [user, setUser] = useState('');
 
   useEffect(() => {
     // currently no authentication on the token is being done (no jwt.verify)
@@ -31,24 +33,24 @@ const App = () => {
         return;
       }
       setAuth(true);
-      setUser(username);
     } catch (e) {
       setAuth(false);
     }
   });
 
   return (
-    <div className="max-w-7xl p-20 m-auto">
+    <div className="w-screen md:max-w-7xl pt-8 p-4  m-auto">
+
       <BrowserRouter>
         {auth && (
-          <div className="w-full">
-            <nav className="flex justify-evenly">
-              <NavLink to="/profile" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-user fa-2x`}><i /></NavLink>
-              <NavLink to="/" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-laugh-squint fa-2x`}><i /></NavLink>
-              <NavLink to="/chats" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-comments fa-2x`}><i /></NavLink>
+        <div className="w-full mb-6">
+          <nav className="flex justify-evenly">
+            <NavLink to="/profile" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-user fa-3x`}><i /></NavLink>
+            <NavLink to="/" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-laugh-squint fa-3x`}><i /></NavLink>
+            <NavLink to="/chats" className={({ isActive }) => `${isActive ? 'fas' : 'far'} fa-comments fa-3x`}><i /></NavLink>
 
-            </nav>
-          </div>
+          </nav>
+        </div>
         )}
 
         <Routes>
@@ -60,16 +62,29 @@ const App = () => {
           />
           <Route
             path="profile"
-            element={auth ? <Profile setAuth={setAuth} user={user} /> : <Login setAuth={setAuth} />}
+            element={auth ? <Profile setAuth={setAuth} /> : <Login setAuth={setAuth} />}
+          />
+          <Route
+            path="profile/upload"
+            element={auth ? <MemeUpload /> : <Login setAuth={setAuth} />}
+          />
+          <Route
+            path="profile/edit"
+            element={auth ? <EditProfile /> : <Login setAuth={setAuth} />}
+          />
+          <Route
+            path="profile/filter"
+            element={auth ? <EditFilters /> : <Login setAuth={setAuth} />}
           />
           <Route
             path="chats"
-            element={auth ? <ChatsList user={user} /> : <Login setAuth={setAuth} />}
+            element={auth ? <ChatsList /> : <Login setAuth={setAuth} />}
           />
         </Routes>
 
         {/* {auth && <Home />} */}
       </BrowserRouter>
+
     </div>
   );
 };

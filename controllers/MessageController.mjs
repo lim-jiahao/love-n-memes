@@ -3,12 +3,13 @@ import BaseController from './BaseController.mjs';
 export default class MessageController extends BaseController {
   async create(req, res) {
     try {
+      if (!req.userId) {
+        res.status(403).send({ message: "Can't send msgs without account" }).end();
+        return;
+      }
+
       const { matchId } = req.params;
-      const user = await this.db.User.findOne({
-        where: {
-          name: req.body.user,
-        },
-      });
+      const user = await this.db.User.findByPk(req.userId);
 
       if (!user) {
         res.status(401).json({ error: 'An error occured' });
@@ -28,6 +29,10 @@ export default class MessageController extends BaseController {
 
   async showByMatchId(req, res) {
     try {
+      if (!req.userId) {
+        res.status(403).send({ message: "Can't get msgs without account" }).end();
+        return;
+      }
       const { matchId } = req.params;
 
       const match = await this.db.Match.findOne({
@@ -49,15 +54,11 @@ export default class MessageController extends BaseController {
         return;
       }
 
-      const messagesResult = await this.model.findAll({
+      const messages = await this.model.findAll({
         where: {
           matchId,
         },
-      });
-
-      const messages = messagesResult.map((m) => {
-        const sender = m.senderId === match.matcher.id ? match.matcher.name : match.matchee.name;
-        return { sender, body: m.body };
+        order: [['id', 'DESC']],
       });
 
       res.json({ messages });

@@ -7,13 +7,8 @@ const initialiseChatSockets = (io) => {
       socket.join(room);
     });
 
-    socket.on('chat', (data) => {
-      let username = data[1];
-      if (username === '') {
-        username = 'Unknown User';
-      }
-      const msg = data[0];
-      io.to(chatRoom).emit('chatMessage', [msg, username]);
+    socket.on('chat', (msg) => {
+      io.to(chatRoom).emit('chatMessage', msg);
     });
 
     socket.on('disconnect', () => {});
